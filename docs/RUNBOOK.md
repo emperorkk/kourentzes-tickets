@@ -2,11 +2,15 @@
 
 ## Install with public intake disabled
 
-Upload `dist/kourentzes-tickets-0.1.1.zip` through wp-admin and activate. Use **Settings → Ticket setup** to explicitly choose the owner's existing account. Setup creates published general, privacy and portal page shells, but submissions remain disabled. Those pages render only ticket shortcodes in a dedicated template; theme page content/widgets are intentionally omitted.
+Upload `dist/kourentzes-tickets-0.1.2.zip` through wp-admin and activate. Use **Settings → Ticket setup** to explicitly choose the owner's existing account. Setup creates published general, privacy and portal page shells, but submissions remain disabled. Those pages render only ticket shortcodes in a dedicated template; theme page content/widgets are intentionally omitted.
 
-Log in as the selected owner. Under **Tickets → Settings and health**, inspect page IDs and scheduler state, publish a completed ticket-specific privacy notice and enter its HTTPS URL. Additional projects and permitted categories can be saved here by slug. Use separate general/privacy form pages for each project if needed. The single configured portal serves all projects. Do not enable destructive uninstall casually.
+Log in as the selected owner. Under **Settings → Ticket settings**, inspect page IDs and scheduler state, publish a completed ticket-specific privacy notice and enter its HTTPS URL. Additional projects and permitted categories can be saved here by slug. Use separate general/privacy form pages for each project if needed. The single configured portal serves all projects. Do not enable destructive uninstall casually.
 
-Only the selected account receives operational capabilities. To recover from accidentally removing that owner's capabilities, an infrastructure administrator can grant the capabilities listed in `Store::caps()` to that same user with appropriate WordPress user-management tooling. Do not add them to the administrator role. Future agents receive individual grants and explicit assignments; privacy access is separate.
+Only the selected account receives initial operational ticket capabilities. WordPress administrators with manage_options retain configuration access under **Settings → Ticket settings**, including a Settings link on the Plugins page, even when they have no ticket-reading permissions. Existing explicit manage_ktickets_settings grants also permit configuration. Configuration access alone does not grant ticket/privacy visibility.
+
+To change the responsible user, select an existing account under **Ticket owner**, confirm the transfer and click **Change ticket owner**. The server checks capability, a dedicated nonce, confirmation and the expected current owner to reject stale forms. Transfer removes the previous owner's individual plugin capabilities and grants them to the new owner, preserving WordPress roles, conversations, visitor keys and sessions. Existing assignment/history IDs are kept. The last transfer records actor, previous/new owner IDs and UTC time in configuration. An administrator who was the previous owner can immediately select another owner or transfer it back; an ordinary agent cannot. If the owner account was deleted, an administrator can use the same screen to select a valid replacement. No reinstall or external capability editing is required for this recovery.
+
+Future agents receive individual grants and assignments; privacy access remains separate.
 
 ## Required live checks before enabling intake
 
@@ -36,7 +40,7 @@ Exports contain at most 20 messages and the latest 30 redacted audit events per 
 
 ## Cleanup and retention
 
-Activation registers `ktickets_cleanup` daily, even with intake disabled. Check **Tickets → Settings and health** for next run, last success/error, overdue purges, overdue privacy dates, inactive requests and holds due for review. Manual cleanup runs one bounded batch: at most 20 tickets, 10,000 expired abuse rows and 1,000 expired replay/session rows each. Repeat batches for a backlog. Failures retain data for a retry; no success is reported for an uncommitted purge.
+Activation registers `ktickets_cleanup` daily, even with intake disabled. Check **Settings → Ticket settings** for next run, last success/error, overdue purges, overdue privacy dates, inactive requests and holds due for review. Manual cleanup runs one bounded batch: at most 20 tickets, 10,000 expired abuse rows and 1,000 expired replay/session rows each. Repeat batches for a backlog. Failures retain data for a retry; no success is reported for an uncommitted purge.
 
 WP-Cron depends on visits and can run late. If a hosting scheduler is available, trigger WordPress cron regularly through the provider's supported method; do not disable WP-Cron without a working replacement. Optional WP-CLI command: `wp ktickets cleanup`. For a larger queue, run it repeatedly. Neither exact-time deletion nor physical expiry of security rows can be guaranteed on an idle site without a reliable scheduler. Expired security credentials/counters are rejected/ignored immediately regardless of physical cleanup.
 

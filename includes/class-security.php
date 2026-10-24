@@ -124,6 +124,7 @@ final class Security {
         if (!$session || ($mutation && (!self::origin($r) || !hash_equals($session['csrf_hash'],self::hash((string)$r->get_header('x-kt-csrf')))))) { self::fail('access_denied',403); }
         return $session;
     }
+    public static function can_settings(): bool { return current_user_can('manage_options') || current_user_can('manage_ktickets_settings'); }
     public static function can_view(array $t): bool {
         if (!current_user_can('view_ktickets')) { return false; }
         if ($t['category']==='privacy' || Service::has_privacy((int)$t['id'])) { return current_user_can('view_ktickets_privacy'); }

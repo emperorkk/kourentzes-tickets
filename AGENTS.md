@@ -14,7 +14,7 @@ Implement real functionality, not mock screens or placeholder security. Keep the
 
 Use custom prefixed database tables, prepared queries, strict validation and escaped plain-text rendering. Implement object-level authorization on every route. Guest WP nonces are not authentication. Separate guest public messages from internal notes and restrict privacy data everywhere, including counts/search/exports.
 
-Only the explicitly selected owner account receives initial ticket-management capabilities. There are three WordPress users; never grant all administrators ticket access merely because they are administrators. Document that database/server administrators remain infrastructure-privileged.
+WordPress administrators with manage_options retain configuration access under Settings > Ticket settings and can explicitly transfer ticket ownership. Configuration access alone must not grant conversation/privacy access. Only the explicitly selected owner account receives initial ticket-management capabilities. There are three WordPress users; never grant all administrators ticket access merely because they are administrators. Document that database/server administrators remain infrastructure-privileged.
 
 Use cryptographic access secrets, hashed persistence, ticket-scoped sessions, CSRF protection, atomic quotas and transactionally consistent writes. Preserve full anti-abuse requirements in the specification. No unbounded storage, scans or silent limiter bypass.
 

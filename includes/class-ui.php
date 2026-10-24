@@ -7,9 +7,11 @@ final class UI {
         add_action('admin_menu',[self::class,'menu']);
         add_action('admin_notices',[self::class,'notices']);
         add_action('admin_post_ktickets_setup',[self::class,'setup']);
+        add_action('admin_post_ktickets_owner',[self::class,'save_owner']);
+        add_filter('plugin_action_links_'.plugin_basename(KTICKETS_FILE),[self::class,'plugin_links']);
         add_action('admin_post_ktickets_settings',[self::class,'save_settings']);
         add_action('admin_post_ktickets_project',[self::class,'save_project']);
-        add_action('admin_post_ktickets_cleanup',static function () { self::guard('manage_ktickets_settings');check_admin_referer('ktickets');Service::cleanup();wp_safe_redirect(admin_url('admin.php?page=ktickets-settings'));exit; });
+        add_action('admin_post_ktickets_cleanup',static function () { self::guard_settings();check_admin_referer('ktickets');Service::cleanup();wp_safe_redirect(self::settings_url());exit; });
         add_action('template_redirect',[self::class,'standalone'],0);
         add_shortcode('ktickets_form',static fn($a)=>self::form(shortcode_atts(['project'=>'soft1-code-assistant'],$a),false));
         add_shortcode('ktickets_privacy_form',static fn($a)=>self::form(shortcode_atts(['project'=>'soft1-code-assistant'],$a),true));
@@ -101,8 +103,31 @@ final class UI {
     private static function options(array $items, string $selected=''): void { $labels=self::enum_labels(); foreach ($items as $v=>$label) { ?><option value="<?php echo esc_attr($v); ?>" <?php selected($v,$selected); ?>><?php echo esc_html($labels[$v]??$label); ?></option><?php } }
     public static function menu(): void {
         if (!Store::settings()['owner']) { add_options_page(__('Ticket setup','kourentzes-tickets'),__('Ticket setup','kourentzes-tickets'),'manage_options','ktickets-setup',[self::class,'setup_page']); }
+        add_options_page(__('Ticket settings','kourentzes-tickets'),__('Ticket settings','kourentzes-tickets'),current_user_can('manage_options')?'manage_options':'manage_ktickets_settings','ktickets-settings',[self::class,'settings_page']);
         add_menu_page(__('Tickets','kourentzes-tickets'),__('Tickets','kourentzes-tickets'),'view_ktickets','ktickets',[self::class,'admin_page'],'dashicons-tickets-alt');
-        add_submenu_page('ktickets',__('Settings and health','kourentzes-tickets'),__('Settings and health','kourentzes-tickets'),'manage_ktickets_settings','ktickets-settings',[self::class,'settings_page']);
+    }
+    public static function settings_url(): string { return admin_url('options-general.php?page=ktickets-settings'); }
+    public static function plugin_links(array $links): array {
+        if (Security::can_settings()) { array_unshift($links,'<a href="'.esc_url(self::settings_url()).'">'.esc_html__('Settings','kourentzes-tickets').'</a>'); }
+        return $links;
+    }
+    private static function guard_settings(): void {
+        if (!Security::can_settings()) { wp_die(esc_html__('Access denied.','kourentzes-tickets'),'', ['response'=>403]); }
+    }
+    public static function save_owner(): void {
+        self::guard_settings();
+        check_admin_referer('ktickets_owner');
+        $id=absint(wp_unslash($_POST['owner']??0));
+        $expected=absint(wp_unslash($_POST['expected_owner']??0));
+        $confirmed=isset($_POST['confirm_transfer']);
+        $result=REST::run(static function () use ($id,$expected,$confirmed) { Service::change_owner($id,$expected,$confirmed);return ['ok'=>true]; });
+        if (is_wp_error($result)) { wp_die(esc_html($result->get_error_message()),'', ['response'=>(int)($result->get_error_data()['status']??400)]); }
+        wp_safe_redirect(Security::can_settings()?self::settings_url():admin_url());exit;
+    }
+    private static function owner_form(array $settings): void {
+        if (!(int)$settings['owner']) { ?><p><a href="<?php echo esc_url(admin_url('options-general.php?page=ktickets-setup')); ?>"><?php esc_html_e('Complete initial owner setup','kourentzes-tickets'); ?></a></p><?php return; }
+        ?><h2><?php esc_html_e('Ticket owner','kourentzes-tickets'); ?></h2><p><?php esc_html_e('WordPress administrators retain access to settings. Changing the owner grants ticket permissions to the selected account and removes them from the previous owner. Tickets, visitor links, messages and WordPress roles are preserved.','kourentzes-tickets'); ?></p><form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>"><input type="hidden" name="action" value="ktickets_owner"><input type="hidden" name="expected_owner" value="<?php echo esc_attr($settings['owner']); ?>"><?php wp_nonce_field('ktickets_owner'); ?><label for="ktickets-owner"><?php esc_html_e('Responsible WordPress user','kourentzes-tickets'); ?></label><?php wp_dropdown_users(['name'=>'owner','id'=>'ktickets-owner','selected'=>(int)$settings['owner'],'show_option_none'=>__('Select an existing user','kourentzes-tickets')]); ?><p><label><input type="checkbox" name="confirm_transfer" required><?php esc_html_e('I confirm the transfer of ticket-management access to this user.','kourentzes-tickets'); ?></label></p><?php submit_button(__('Change ticket owner','kourentzes-tickets')); ?></form><?php
+        if (!empty($settings['owner_change'])) { ?><p><?php esc_html_e('Last ownership change (UTC)','kourentzes-tickets'); ?>: <?php echo esc_html($settings['owner_change']['at']); ?></p><?php }
     }
     public static function notices(): void {
         if (!current_user_can('manage_options') && !current_user_can('manage_ktickets_settings')) { return; }
@@ -130,10 +155,10 @@ final class UI {
             }
             update_option('ktickets_settings',$s,false);
         });
-        wp_safe_redirect(admin_url('admin.php?page=ktickets-settings'));exit;
+        wp_safe_redirect(self::settings_url());exit;
     }
     public static function save_settings(): void {
-        self::guard('manage_ktickets_settings');
+        self::guard_settings();
         check_admin_referer('ktickets');
         $s=Store::settings();
         foreach (['enabled','verified','manual_attack','delete_on_uninstall'] as $field) { $s[$field]=isset($_POST[$field]); }
@@ -144,10 +169,14 @@ final class UI {
         foreach (['portal_page'=>'ktickets_portal','form_page'=>'ktickets_form','privacy_page'=>'ktickets_privacy_form'] as $field=>$shortcode) {
             $page=get_post($s[$field]);if (!$page || $page->post_status!=='publish' || !has_shortcode($page->post_content,$shortcode)) { $s['enabled']=false; }
         }
-        update_option('ktickets_settings',$s,false);wp_safe_redirect(admin_url('admin.php?page=ktickets-settings'));exit;
+        Security::serialized(static function () use ($s) {
+            $current=Store::settings();$s['owner']=$current['owner'];
+            if (isset($current['owner_change'])) { $s['owner_change']=$current['owner_change']; }
+            update_option('ktickets_settings',$s,false);
+        });wp_safe_redirect(self::settings_url());exit;
     }
     public static function save_project(): void {
-        self::guard('manage_ktickets_settings');
+        self::guard_settings();
         check_admin_referer('ktickets');
         $slug=sanitize_title(wp_unslash($_POST['slug']??''));$name=sanitize_text_field(wp_unslash($_POST['name']??''));
         if (!$slug || strlen($slug)>80 || !$name || mb_strlen($name)>160) { wp_die(esc_html__('Invalid project.','kourentzes-tickets')); }
@@ -156,14 +185,14 @@ final class UI {
         $data=['slug'=>$slug,'name'=>$name,'enabled'=>isset($_POST['enabled'])?1:0,'allowed_categories'=>wp_json_encode($cats)];
         $t=Store::table('projects');$db=Store::db();$id=(int)$db->get_var($db->prepare("SELECT id FROM $t WHERE slug=%s",$slug));
         if ($id) { $db->update($t,$data,['id'=>$id]); }else { Store::insert('projects',$data); }
-        wp_safe_redirect(admin_url('admin.php?page=ktickets-settings'));exit;
+        wp_safe_redirect(self::settings_url());exit;
     }
     public static function settings_page(): void {
-        if (!current_user_can('manage_ktickets_settings')) { return; }$s=Store::settings();$db=Store::db();$t=Store::table('tickets');$p=Store::table('privacy');
-        ?><div class="wrap"><h1><?php esc_html_e('Ticket settings and health','kourentzes-tickets'); ?></h1><p><?php esc_html_e('Intake is disabled by default. Verify live cache exclusions, analytics isolation, hosting logs/backups, privacy notice and HTTPS before enabling it.','kourentzes-tickets'); ?></p><form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>"><input type="hidden" name="action" value="ktickets_settings"><?php wp_nonce_field('ktickets'); ?>
+        if (!Security::can_settings()) { return; }$s=Store::settings();$db=Store::db();$t=Store::table('tickets');$p=Store::table('privacy');
+        ?><div class="wrap"><h1><?php esc_html_e('Ticket settings and health','kourentzes-tickets'); ?></h1><?php self::owner_form($s); ?><p><?php esc_html_e('Intake is disabled by default. Verify live cache exclusions, analytics isolation, hosting logs/backups, privacy notice and HTTPS before enabling it.','kourentzes-tickets'); ?></p><form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>"><input type="hidden" name="action" value="ktickets_settings"><?php wp_nonce_field('ktickets'); ?>
         <?php foreach (['policy_url'=>__('Published privacy notice URL','kourentzes-tickets'),'terms_url'=>__('Terms URL (optional)','kourentzes-tickets'),'portal_page'=>__('Portal page ID','kourentzes-tickets'),'form_page'=>__('General form page ID','kourentzes-tickets'),'privacy_page'=>__('Privacy form page ID','kourentzes-tickets'),'create_short'=>__('Creation limit / 10 minutes','kourentzes-tickets'),'create_day'=>__('Creation limit / rolling 24 hours','kourentzes-tickets'),'attack_valid'=>__('Attack threshold / valid attempts in 10 minutes','kourentzes-tickets'),'attack_failed'=>__('Attack threshold / failed attempts in 5 minutes','kourentzes-tickets'),'quarantine_capacity'=>__('General quarantine capacity','kourentzes-tickets'),'network_reply'=>__('Network replies / 10 minutes','kourentzes-tickets')] as $field=>$label) { ?><p><label><?php echo esc_html($label); ?><br><input class="regular-text" name="<?php echo esc_attr($field); ?>" value="<?php echo esc_attr($s[$field]); ?>" type="<?php echo str_ends_with($field,'url')?'url':'number'; ?>"></label></p><?php } ?>
         <?php foreach (['verified'=>__('I verified live caching, analytics isolation, privacy notice, hosting logs/backups and HTTPS.','kourentzes-tickets'),'enabled'=>__('Enable public intake','kourentzes-tickets'),'manual_attack'=>__('Proactively enable attack mode for general intake','kourentzes-tickets'),'delete_on_uninstall'=>__('Permanently delete ALL ticket data and capabilities on uninstall (irreversible)','kourentzes-tickets')] as $field=>$label) { ?><p><label><input type="checkbox" name="<?php echo esc_attr($field); ?>" <?php checked($s[$field]); ?>><?php echo esc_html($label); ?></label></p><?php }submit_button(); ?></form><h2><?php esc_html_e('Operational health','kourentzes-tickets'); ?></h2><pre><?php
-        $scope=Service::scope();
+        $scope=current_user_can('view_ktickets')?Service::scope():'0=1';
         $health=['cleanup'=>get_option('ktickets_health',[]),'next_cleanup_utc'=>wp_next_scheduled('ktickets_cleanup')?gmdate('c',wp_next_scheduled('ktickets_cleanup')):null,'attack_active'=>Security::attack(),'attack_trigger'=>get_option('ktickets_attack',[]),'overdue_purges'=>(int)$db->get_var($db->prepare("SELECT COUNT(*) FROM $t t WHERE $scope AND t.purge_at<=%s",Store::now())),'inactive_90_days'=>(int)$db->get_var($db->prepare("SELECT COUNT(*) FROM $t t WHERE $scope AND t.status<>'closed' AND t.updated_at<%s",gmdate('Y-m-d H:i:s',time()-90*86400)))];
         if (current_user_can('view_ktickets_privacy')) { $health['overdue_privacy']=(int)$db->get_var($db->prepare("SELECT COUNT(*) FROM $p p JOIN $t t ON t.id=p.ticket_id WHERE $scope AND p.received_at IS NOT NULL AND p.target_due_at<%s AND t.status<>'closed'",Store::now())); }
         if (current_user_can('manage_ktickets_privacy')) { $health['holds_due_review']=(int)$db->get_var($db->prepare("SELECT COUNT(*) FROM $p WHERE hold_reason<>'' AND hold_review_at<=%s",Store::now())); }

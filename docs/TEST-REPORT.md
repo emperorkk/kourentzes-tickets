@@ -57,3 +57,12 @@ Local results on the same WordPress 7.1.3 / PHP 8.3.6 / MariaDB 10.11.14 fixture
 The original v0.1.0 GitHub Actions run also completed successfully on the configured PHP 8.2 job. The updated v0.1.1 workflow adds a Plugin Check gate against the extracted ZIP. Its remote outcome is separate from these executed local results. Exact production patch versions, live-stack verification and browser visual/keyboard QA remain outstanding.
 
 The WordPress readme Tested up to field uses the required major-branch format `7.1`; actual WordPress execution was 7.1.3. Package generation validates this format and stable-tag/version agreement. The first remote v0.1.1 integration job passed all 82 assertions; its Plugin Check step identified the patch-level readme format, which was corrected before final delivery.
+
+
+## v0.1.2 owner-settings verification
+
+WordPress administrators now retain configuration access under Settings → Ticket settings without automatically receiving conversation/privacy permissions. A dedicated owner-transfer form validates capability, nonce, explicit confirmation and the expected current owner. A transaction transfers the individual ticket capabilities, preserving WordPress roles, conversations and visitor credentials. The administrator can transfer ownership back after losing operational ticket capabilities. Ordinary agents cannot transfer ownership. Settings saves preserve ownership metadata under the same site write lock.
+
+Local verification: **98 integration/security assertions passed**. New cases cover administrator configuration access without ticket grants, visible owner transfer, no conversation data in settings, confirmation/invalid-user/stale-form rejection, transfer/revocation, preserved roles/tickets/keys, agent denial and transfer-back recovery. The HTTP suite passed including invalid owner-transfer nonces, missing confirmation, transfer to a subscriber, continued administrator settings access, subscriber owner settings access, old-owner ticket API denial and successful transfer back. Plugin Check 2.1.0 returned no errors or warnings on the extracted v0.1.2 ZIP. PHP/JS syntax and package structure checks passed.
+
+No live installation was performed. Browser visual/keyboard and live integration verification remain outstanding.

@@ -35,6 +35,7 @@ wp_set_current_user(0);wp_set_current_user($owner->ID);
 $other=wp_insert_user(['user_login'=>'fixture_other','user_pass'=>wp_generate_password(),'role'=>'administrator']); if (is_wp_error($other)) { $other=get_user_by('login','fixture_other')->ID; }
 check(!user_can($other,'view_ktickets'),'other administrator has no ticket access');
 $agent=wp_insert_user(['user_login'=>'fixture_agent','user_pass'=>wp_generate_password(),'role'=>'subscriber']);if (is_wp_error($agent)) { $agent=get_user_by('login','fixture_agent')->ID; }
+wp_set_password('fixture-agent-only',$agent);
 $u=get_user_by('id',$agent);foreach (['view_ktickets','reply_ktickets'] as $cap) { $u->add_cap($cap); }
 foreach (['projects','tickets','messages','access','sessions','events','privacy','abuse','replays'] as $name) { if ($name!=='projects') Store::sql('DELETE FROM '.Store::table($name)); }
 $s=Store::defaults();$s['owner']=$owner->ID;$s['verified']=true;$s['enabled']=true;$s['policy_url']='https://example.test/privacy';
@@ -136,6 +137,19 @@ $beforeSuppress=Store::db()->suppress_errors;
 try { Security::serialized(function () { Store::sql('SELECT missing_column FROM '.Store::table('tickets')); }); } catch (RuntimeException $e) { check($e->getMessage()==='storage_unavailable','database failure is controlled'); }
 check(Store::db()->suppress_errors===$beforeSuppress,'database error suppression restored');
 check(wp_next_scheduled('ktickets_cleanup')!==false,'cleanup scheduled');
+// Site administrators retain configuration access independently of ticket authorization.
+wp_set_current_user($other);check(Security::can_settings(),'administrator without ticket capabilities can manage settings');check(!current_user_can('view_ktickets'),'settings access does not auto-grant ticket access');
+ob_start();KTickets\UI::settings_page();$settingsHtml=ob_get_clean();check(str_contains($settingsHtml,'ktickets_owner') && str_contains($settingsHtml,'Change ticket owner'),'settings include explicit owner transfer');
+check(!str_contains($settingsHtml,'SECRET INTERNAL NOTE'),'administrator settings disclose no conversation content');
+denied(fn()=>Service::change_owner($other,(int)$owner->ID,false),'confirmation_required');denied(fn()=>Service::change_owner(999999,(int)$owner->ID,true),'invalid_owner');
+$ticketCount=(int)Store::db()->get_var('SELECT COUNT(*) FROM '.Store::table('tickets'));$accessCount=(int)Store::db()->get_var('SELECT COUNT(*) FROM '.Store::table('access'));
+Service::change_owner($other,(int)$owner->ID,true);check((int)Store::settings()['owner']===(int)$other,'explicit transfer selects new owner');check(user_can($other,'view_ktickets_privacy'),'new owner receives operational privacy permissions');check(!user_can($owner->ID,'view_ktickets'),'previous owner loses ticket grants');check(user_can($owner->ID,'manage_options'),'previous owner retains WordPress administrator role');
+check($ticketCount===(int)Store::db()->get_var('SELECT COUNT(*) FROM '.Store::table('tickets')) && $accessCount===(int)Store::db()->get_var('SELECT COUNT(*) FROM '.Store::table('access')),'ownership transfer preserves conversations and visitor keys');
+wp_set_current_user($owner->ID);check(Security::can_settings(),'previous owner administrator can still open settings');denied(fn()=>Service::change_owner((int)$owner->ID,(int)$owner->ID,true),'revision_conflict');
+wp_set_current_user($agent);check(!Security::can_settings(),'ordinary agent cannot manage configuration');denied(fn()=>Service::change_owner($agent,$other,true),'access_denied');
+wp_set_current_user($owner->ID);Service::change_owner((int)$owner->ID,$other,true);
+check(user_can($owner->ID,'view_ktickets') && !user_can($other,'view_ktickets'),'administrator can transfer ownership back without lockout');
+
 // Deactivation and uninstall lifecycle.
 do_action('deactivate_kourentzes-tickets/kourentzes-tickets.php');check(!wp_next_scheduled('ktickets_cleanup'),'deactivation unschedules cleanup');check((bool)Store::by_id((int)$b['id']),'deactivation retains data');
 if (!defined('WP_UNINSTALL_PLUGIN')) { define('WP_UNINSTALL_PLUGIN','kourentzes-tickets/kourentzes-tickets.php'); }

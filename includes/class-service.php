@@ -5,6 +5,37 @@ if (!defined('ABSPATH')) { exit; }
 final class Service {
     public const STATUSES=['open','in_progress','waiting_requester','resolved','closed'];
     public const TYPES=['access','rectification','erasure','restriction','objection','portability','other'];
+    public static function change_owner(int $id, int $expected, bool $confirmed): void {
+        if (!Security::can_settings()) { Security::fail('access_denied',403); }
+        if (!$confirmed) { Security::fail('confirmation_required'); }
+        $affected=[];
+        try {
+            Security::serialized(static function () use ($id,$expected,&$affected) {
+                Store::transaction(static function () use ($id,$expected,&$affected) {
+                    $s=Store::settings();$old=(int)$s['owner'];
+                    if (!$old || $old!==$expected) { Security::fail('revision_conflict',409); }
+                    if (!get_user_by('id',$id)) { Security::fail('invalid_owner'); }
+                    if ($id===$old) { return; }
+                    $key=Store::db()->get_blog_prefix().'capabilities';
+                    foreach ([$old=>false,$id=>true] as $user_id=>$grant) {
+                        if (!get_user_by('id',$user_id)) { continue; }
+                        $affected[]=$user_id;
+                        $before=(array)get_user_meta($user_id,$key,true);$after=$before;
+                        foreach (Store::caps() as $cap) { if ($grant) { $after[$cap]=true; } else { unset($after[$cap]); } }
+                        if ($before!==$after && update_user_meta($user_id,$key,$after)===false) { throw new \RuntimeException('storage_unavailable'); }
+                    }
+                    $s['owner']=$id;
+                    $s['owner_change']=['previous_owner'=>$old,'owner'=>$id,'actor'=>get_current_user_id(),'at'=>Store::now()];
+                    if (!update_option('ktickets_settings',$s,false)) { throw new \RuntimeException('storage_unavailable'); }
+                });
+            });
+        } finally {
+            // Invalidate capability/option caches after commit or rollback, including the current user object.
+            foreach ($affected as $user_id) { clean_user_cache($user_id); }
+            wp_cache_delete('ktickets_settings','options');wp_cache_delete('alloptions','options');
+            $current=get_current_user_id();wp_set_current_user(0);wp_set_current_user($current);
+        }
+    }
     public static function text($value, int $min, int $max): string {
         if (!is_string($value) || !mb_check_encoding($value,'UTF-8') || str_contains($value,"\0")) { Security::fail('invalid_fields'); }
         $value=str_replace(["\r\n","\r"],"\n",trim($value));

@@ -1,6 +1,6 @@
 # Kourentzes Tickets English translation template.
 msgid ""
-msgstr "Project-Id-Version: Kourentzes Tickets 0.1.1\nReport-Msgid-Bugs-To: https://github.com/emperorkk/kourentzes-tickets/issues\nPOT-Creation-Date: 2026-10-24 00:00+0000\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\n"
+msgstr "Project-Id-Version: Kourentzes Tickets 0.1.2\nReport-Msgid-Bugs-To: https://github.com/emperorkk/kourentzes-tickets/issues\nPOT-Creation-Date: 2026-10-24 00:00+0000\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\n"
 
 msgid "A retention hold requires a reason and a future review date."
 msgstr ""
@@ -38,6 +38,9 @@ msgstr ""
 msgid "Category"
 msgstr ""
 
+msgid "Change ticket owner"
+msgstr ""
+
 msgid "Check the required fields and their length limits."
 msgstr ""
 
@@ -45,6 +48,12 @@ msgid "Closed"
 msgstr ""
 
 msgid "Closed: read-only. Use the new request link to contact us again."
+msgstr ""
+
+msgid "Complete initial owner setup"
+msgstr ""
+
+msgid "Confirm this action before continuing."
 msgstr ""
 
 msgid "Copied."
@@ -107,6 +116,9 @@ msgstr ""
 msgid "Hold review date (UTC: YYYY-MM-DD HH:MM:SS)"
 msgstr ""
 
+msgid "I confirm the transfer of ticket-management access to this user."
+msgstr ""
+
 msgid "I understand that the private link is my access key and cannot be recovered if lost."
 msgstr ""
 
@@ -132,6 +144,9 @@ msgid "Kourentzes Tickets requires a single-site installation."
 msgstr ""
 
 msgid "Kourentzes Tickets: complete owner setup and live cache/privacy verification before enabling public submissions. HTTPS is required."
+msgstr ""
+
+msgid "Last ownership change (UTC)"
 msgstr ""
 
 msgid "Lifecycle status"
@@ -290,6 +305,9 @@ msgstr ""
 msgid "Resolved"
 msgstr ""
 
+msgid "Responsible WordPress user"
+msgstr ""
+
 msgid "Restriction"
 msgstr ""
 
@@ -323,7 +341,13 @@ msgstr ""
 msgid "Select Konstantinos Kourentzes’ existing WordPress account explicitly. Only this account receives ticket capabilities. Infrastructure administrators still have technical access."
 msgstr ""
 
+msgid "Select an existing WordPress user."
+msgstr ""
+
 msgid "Select an existing account."
+msgstr ""
+
+msgid "Select an existing user"
 msgstr ""
 
 msgid "Select at least one category."
@@ -341,7 +365,7 @@ msgstr ""
 msgid "Send reply"
 msgstr ""
 
-msgid "Settings and health"
+msgid "Settings"
 msgstr ""
 
 msgid "Slug"
@@ -422,6 +446,12 @@ msgstr ""
 msgid "This ticket project is unavailable."
 msgstr ""
 
+msgid "Ticket owner"
+msgstr ""
+
+msgid "Ticket settings"
+msgstr ""
+
 msgid "Ticket settings and health"
 msgstr ""
 
@@ -450,6 +480,9 @@ msgid "Waiting for requester"
 msgstr ""
 
 msgid "Website"
+msgstr ""
+
+msgid "WordPress administrators retain access to settings. Changing the owner grants ticket permissions to the selected account and removes them from the previous owner. Tickets, visitor links, messages and WordPress roles are preserved."
 msgstr ""
 
 msgid "Working…"

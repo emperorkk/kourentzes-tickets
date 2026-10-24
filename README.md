@@ -2,13 +2,13 @@
 
 Standalone WordPress plugin for private anonymous conversations, without email or visitor accounts.
 
-**v0.1.1 — implementation candidate.** Source, an installable ZIP and repeatable tests are included. Public intake starts disabled. This repository has not been deployed to the owner's live website.
+**v0.1.2 — implementation candidate.** Source, an installable ZIP and repeatable tests are included. Public intake starts disabled. This repository has not been deployed to the owner's live website.
 
 ## Install
 
-1. Download `dist/kourentzes-tickets-0.1.1.zip` and upload it under **Plugins → Add New → Upload Plugin**. Activate it.
+1. Download `dist/kourentzes-tickets-0.1.2.zip` and upload it under **Plugins → Add New → Upload Plugin**. Activate it.
 2. Open **Settings → Ticket setup**, explicitly select Konstantinos Kourentzes' existing WordPress account, and create the three ticket pages. No administrator role or other user receives ticket access automatically.
-3. As that selected owner, open **Tickets → Settings and health**. Publish the completed privacy notice, enter its HTTPS URL and verify the created page IDs.
+3. As that selected owner, open **Settings → Ticket settings**. Publish the completed privacy notice, enter its HTTPS URL and verify the created page IDs.
 4. Follow [the deployment runbook](docs/RUNBOOK.md), including live cache/analytics exclusions and synthetic tests. Then acknowledge verification and enable intake.
 
 Initial project: **Soft1 Code assistant** (`soft1-code-assistant`). Categories: Technical issue, Suggestion, Privacy / personal data, Other. The engine is independent of Soft1 and ChatGPT.
@@ -46,3 +46,5 @@ Run `python3 scripts/package.py` to rebuild the deterministic distributable. PHP
 For a disposable WordPress database, set `KTICKETS_TESTING=1`, `KTICKETS_WP_PATH`, `KTICKETS_DB_NAME`, `KTICKETS_DB_USER`, `KTICKETS_DB_PASSWORD` and `KTICKETS_DB_HOST`, then run `bash scripts/test-integration.sh`. It installs synthetic fixture users and **deletes ticket data**; never run against production. `tests/browser.cjs` and `tests/http_smoke.py` require a separate fresh local fixture, documented in the runbook.
 
 License: GPL-2.0-or-later.
+
+To change the responsible user later, open **Settings → Ticket settings → Ticket owner**, select the existing account and confirm **Change ticket owner**. The previous owner loses ticket grants, while WordPress administrators retain settings access. Ticket data and visitor links are preserved.

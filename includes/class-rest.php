@@ -52,6 +52,8 @@ final class REST {
     }
     public static function message(string $code): string {
         $messages=[
+            'invalid_owner'=>__('Select an existing WordPress user.','kourentzes-tickets'),
+            'confirmation_required'=>__('Confirm this action before continuing.','kourentzes-tickets'),
             'access_denied'=>__('Access denied. Check your private link.','kourentzes-tickets'),
             'rate_limited'=>__('Too many requests. Wait before trying again. Your request has not been received.','kourentzes-tickets'),
             'intake_disabled'=>__('New submissions are temporarily disabled.','kourentzes-tickets'),

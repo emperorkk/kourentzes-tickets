@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Kourentzes Tickets
  * Description: Private anonymous ticket conversations with local abuse protection. No email or accounts required.
- * Version: 0.1.1
+ * Version: 0.1.2
  * Requires at least: 7.1.3
  * Requires PHP: 8.2
  * Author: Konstantinos Kourentzes
@@ -13,7 +13,7 @@
  * Text Domain: kourentzes-tickets
  */
 if (!defined('ABSPATH')) { exit; }
-define('KTICKETS_VERSION', '0.1.1');
+define('KTICKETS_VERSION', '0.1.2');
 define('KTICKETS_FILE', __FILE__);
 foreach (['store', 'security', 'service', 'rest', 'ui'] as $ktickets_part) {
     require_once __DIR__ . '/includes/class-' . $ktickets_part . '.php';

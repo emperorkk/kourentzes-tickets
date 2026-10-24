@@ -3,7 +3,7 @@ Tags: tickets, privacy, support
 Requires at least: 7.1.3
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 0.1.1
+Stable tag: 0.1.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -23,7 +23,7 @@ Browser visual/keyboard testing and verification of the live site's cache, analy
 
 1. Upload and activate the plugin ZIP through Plugins > Add New > Upload Plugin.
 2. Open Settings > Ticket setup and explicitly select the owner's existing account.
-3. Sign in as that user and open Tickets > Settings and health.
+3. Open Settings > Ticket settings as the selected owner or a WordPress administrator.
 4. Complete the published privacy notice and verify HTTPS, cache exclusions, analytics isolation and synthetic visitor flows.
 5. Enable public intake only after verification. See docs/RUNBOOK.md for the full procedure.
 
@@ -47,9 +47,14 @@ Yes. Use the supplied POT template and install the matching MO file in wp-conten
 
 == Changelog ==
 
+= 0.1.2 =
+
+Keep settings available to WordPress administrators and add explicit owner transfer with confirmation and stale-form protection. Preserve tickets, visitor links and WordPress roles.
+
 = 0.1.1 =
 
 Fix Plugin Check findings: literal translation strings, explicit output escaping, visible nonce validation, normalized inputs, WordPress dependency-based isolated assets and WordPress readme metadata.
+
 
 = 0.1.0 =
 
@@ -57,6 +62,6 @@ Initial implementation candidate with private guest sessions, owner-only setup, 
 
 == Upgrade Notice ==
 
-= 0.1.1 =
+= 0.1.2 =
 
-Maintenance release for Plugin Check compatibility. Existing tickets, capabilities and settings are preserved. Public intake remains subject to live verification.
+Keep settings accessible to WordPress administrators and support explicit ticket-owner transfer. Existing tickets, capabilities and settings are preserved. Public intake remains subject to live verification.

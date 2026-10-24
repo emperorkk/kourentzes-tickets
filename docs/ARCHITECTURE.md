@@ -8,7 +8,7 @@ Custom tables use the real WordPress prefix, InnoDB and utf8mb4. Migration failu
 
 ## Access and application privileges
 
-Only an explicitly selected existing user receives individual ticket capabilities. No role receives them. Future agents can receive `view_ktickets` and `reply_ktickets`; assigned general tickets are visible by default. `view_all_ktickets` expands general visibility. Privacy visibility and changes require their separate capabilities. Settings/rotation/export use `manage_ktickets_settings`; assignment and deletion require their respective capabilities. Infrastructure and plugin administrators remain technically privileged.
+Only an explicitly selected existing user receives individual ticket capabilities. No role receives them. Future agents can receive `view_ktickets` and `reply_ktickets`; assigned general tickets are visible by default. `view_all_ktickets` expands general visibility. Privacy visibility and changes require their separate capabilities. Configuration accepts `manage_options` or `manage_ktickets_settings`; rotation/export still require `manage_ktickets_settings` plus operational object access. Assignment and deletion require their respective capabilities. Administrators retain configuration access and can explicitly transfer the operational owner without automatically seeing tickets. Infrastructure and plugin administrators remain technically privileged.
 
 Raising a privacy request on an existing general ticket adds privacy metadata and immediately excludes the entire conversation from agents without privacy access. It also appears in the privacy queue. Changing the category away from privacy does not remove this historical restriction or erase privacy evidence.
 

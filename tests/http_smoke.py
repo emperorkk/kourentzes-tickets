@@ -73,4 +73,24 @@ html=admin.get(base+'/wp-admin/admin.php?page=ktickets');html.raise_for_status()
 ac=json.loads(BeautifulSoup(html.text,'html.parser').find(attrs={'data-kt-config':True})['data-kt-config'])
 r=api('admin/tickets',session=admin,headers={'X-WP-Nonce':ac['nonce']});r.raise_for_status();assert len(r.json())==1
 assert api('admin/tickets').status_code==403
+# Explicit owner transfer is available in Settings and survives loss of ticket capabilities.
+settingsPage=admin.get(base+'/wp-admin/options-general.php?page=ktickets-settings');settingsPage.raise_for_status()
+ownerForm=BeautifulSoup(settingsPage.text,'html.parser').find('input',{'name':'action','value':'ktickets_owner'}).find_parent('form')
+choices=ownerForm.find('select',{'name':'owner'}).find_all('option')
+target=next(o['value'] for o in choices if o.text.strip()=='fixture_agent')
+ownerNonce=ownerForm.find('input',{'name':'_wpnonce'})['value'];oldOwner=ownerForm.find('input',{'name':'expected_owner'})['value']
+transfer={'action':'ktickets_owner','owner':target,'expected_owner':oldOwner,'confirm_transfer':'on','_wpnonce':ownerNonce}
+assert admin.post(base+'/wp-admin/admin-post.php',data={**transfer,'_wpnonce':'invalid'}).status_code==403
+assert admin.post(base+'/wp-admin/admin-post.php',data={k:v for k,v in transfer.items() if k!='confirm_transfer'}).status_code==400
+moved=admin.post(base+'/wp-admin/admin-post.php',data=transfer);moved.raise_for_status();assert 'ktickets-settings' in moved.url
+assert api('admin/tickets',session=admin,headers={'X-WP-Nonce':ac['nonce']}).status_code==403
+retained=admin.get(base+'/wp-admin/options-general.php?page=ktickets-settings');retained.raise_for_status()
+backForm=BeautifulSoup(retained.text,'html.parser').find('input',{'name':'action','value':'ktickets_owner'}).find_parent('form')
+assert backForm.find('select',{'name':'owner'}).find('option',selected=True)['value']==target
+newOwner=requests.Session();newOwner.get(base+'/wp-login.php').raise_for_status()
+newOwner.post(base+'/wp-login.php',data={'log':'fixture_agent','pwd':'fixture-agent-only','wp-submit':'Log In','testcookie':'1','redirect_to':base+'/wp-admin/'})
+newSettings=newOwner.get(base+'/wp-admin/options-general.php?page=ktickets-settings');newSettings.raise_for_status();assert 'Change ticket owner' in newSettings.text
+restored=admin.post(base+'/wp-admin/admin-post.php',data={'action':'ktickets_owner','owner':oldOwner,'expected_owner':target,'confirm_transfer':'on','_wpnonce':backForm.find('input',{'name':'_wpnonce'})['value']});restored.raise_for_status()
+assert api('admin/tickets',session=admin,headers={'X-WP-Nonce':ac['nonce']}).status_code==200
+assert newOwner.get(base+'/wp-admin/options-general.php?page=ktickets-settings').status_code==403
 print('PASS HTTP: explicit owner setup, disabled-to-enabled settings, isolated form/portal, headers/CSP, subdirectory cookies, create/retry/exchange/reply/logout, CSRF denial, privacy form and admin REST.')
