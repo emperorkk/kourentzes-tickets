@@ -1,0 +1,22 @@
+.ktickets { color:#192431; background:#f7f9fc; font:16px/1.6 system-ui,sans-serif; max-width:960px; margin:2rem auto; padding:1.5rem; }
+.ktickets *, .kt-surface * { box-sizing:border-box; }
+.ktickets label,.kt-surface label { display:block; margin:1rem 0; font-weight:600; }
+.ktickets input:not([type=checkbox]),.ktickets textarea,.ktickets select,.kt-surface input:not([type=checkbox]),.kt-surface textarea,.kt-surface select { display:block; width:100%; max-width:100%; padding:.7rem; border:1px solid #67798b; border-radius:5px; color:#192431; background:white; font:inherit; }
+.ktickets button,.kt-surface button { margin:.5rem .5rem .5rem 0; padding:.65rem 1rem; border:1px solid #254d74; border-radius:5px; background:#173f65; color:white; font:inherit; cursor:pointer; }
+.ktickets button:disabled,.kt-surface button:disabled { opacity:.55; cursor:wait; }
+.ktickets a,.kt-surface a { color:#124c83; overflow-wrap:anywhere; }
+.ktickets :focus-visible,.kt-surface :focus-visible { outline:3px solid #b75b00; outline-offset:3px; }
+.ktickets .kt-check,.kt-surface .kt-check { display:flex; gap:.75rem; align-items:flex-start; }
+.ktickets input[type=checkbox],.kt-surface input[type=checkbox] { width:1.2rem; height:1.2rem; flex-shrink:0; }
+.kt-honey { position:absolute; left:-10000px; width:1px; height:1px; overflow:hidden; }
+.kt-message { padding:1rem; margin:1rem 0; background:#fff; border:1px solid #bdc9d5; border-radius:6px; }
+.kt-internal { background:#fff3cf; border-color:#ad7a00; }
+.kt-message time { display:block; color:#526071; font-size:.85rem; }
+.kt-message pre,.kt-audit { white-space:pre-wrap; overflow-wrap:anywhere; font: .9rem/1.6 ui-monospace,monospace; }
+.kt-result:not(:empty) { padding:1rem; border-left:4px solid #254d74; background:#e8eff7; margin:1rem 0; }
+.kt-admin-list { overflow-x:auto; margin:1rem 0; }
+.kt-admin-list td { padding:.7rem; overflow-wrap:anywhere; }
+.kt-admin-note { border:2px solid #ad7a00; padding:1rem; }
+.kt-admin-update,.kt-admin-privacy { margin:2rem 0; border-top:1px solid #aab8c5; }
+.ktickets [hidden],.kt-surface [hidden] { display:none!important; }
+@media(max-width:600px) { .ktickets { margin:0; padding:1rem; } .ktickets button { min-height:44px; } }
