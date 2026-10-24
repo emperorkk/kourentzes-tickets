@@ -5,6 +5,9 @@ import re
 import zipfile
 root=Path(__file__).resolve().parent.parent
 version=re.search(r'\* Version:\s*([^\s]+)',(root/'kourentzes-tickets.php').read_text()).group(1)
+readme=(root/'readme.txt').read_text()
+assert re.search(r'^Stable tag: '+re.escape(version)+r'$',readme,re.M), 'Stable tag must match the plugin version'
+assert re.search(r'^Tested up to: [0-9]+\.[0-9]+$',readme,re.M), 'WordPress requires a major-branch Tested up to value'
 out=root/'dist';out.mkdir(exist_ok=True)
 target=out/f'kourentzes-tickets-{version}.zip'
 files=[root/'kourentzes-tickets.php',root/'uninstall.php',root/'LICENSE',root/'README.md',root/'readme.txt',root/'CHANGELOG.md']
