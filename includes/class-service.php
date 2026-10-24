@@ -91,7 +91,7 @@ final class Service {
             $hash=Security::hash((string)($d['key']??''));
             if (!$access || !hash_equals($access['secret_hash'],$hash)) { Security::record($network[0],'exchange-failed',600); Security::fail('access_denied',403); }
             $sessions=Store::table('sessions');
-            $previous=(string)($_COOKIE['kt_s_'.$t['public_id']]??'');
+            $previous=sanitize_text_field(wp_unslash($_COOKIE['kt_s_'.$t['public_id']]??''));
             if (preg_match('/^[A-Za-z0-9_-]{43}$/D',$previous)) { Store::sql(Store::db()->prepare("DELETE FROM $sessions WHERE ticket_id=%d AND session_hash=%s",$t['id'],Security::hash($previous))); }
             Store::sql(Store::db()->prepare("DELETE FROM $sessions WHERE expires_at<=%s",Store::now()));
             $total=(int)Store::db()->get_var(Store::db()->prepare("SELECT COUNT(*) FROM $sessions WHERE ticket_id=%d",$t['id']));

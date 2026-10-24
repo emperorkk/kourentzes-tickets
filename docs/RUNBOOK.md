@@ -2,7 +2,7 @@
 
 ## Install with public intake disabled
 
-Upload `dist/kourentzes-tickets-0.1.0.zip` through wp-admin and activate. Use **Settings → Ticket setup** to explicitly choose the owner's existing account. Setup creates published general, privacy and portal page shells, but submissions remain disabled. Those pages render only ticket shortcodes in a dedicated template; theme page content/widgets are intentionally omitted.
+Upload `dist/kourentzes-tickets-0.1.1.zip` through wp-admin and activate. Use **Settings → Ticket setup** to explicitly choose the owner's existing account. Setup creates published general, privacy and portal page shells, but submissions remain disabled. Those pages render only ticket shortcodes in a dedicated template; theme page content/widgets are intentionally omitted.
 
 Log in as the selected owner. Under **Tickets → Settings and health**, inspect page IDs and scheduler state, publish a completed ticket-specific privacy notice and enter its HTTPS URL. Additional projects and permitted categories can be saved here by slug. Use separate general/privacy form pages for each project if needed. The single configured portal serves all projects. Do not enable destructive uninstall casually.
 
@@ -57,3 +57,12 @@ Uninstall retains data by default. If the owner explicitly enables **Permanently
 `tests/http_smoke.py` uses Python `requests` and `beautifulsoup4`. It expects a fresh owner-unconfigured WordPress fixture at `http://localhost:8099/konstantinos` (override `KTICKETS_BASE`), fixture owner `fixture_owner` / `fixture-password-only`, local development constants above and a running HTTP server. It enables intake only in that disposable fixture. It checks actual HTTP cookies/headers/setup/create/retry/exchange/reply/logout/admin permissions.
 
 `tests/browser.cjs` uses Playwright with the same fresh fixture. Set `KTICKETS_PLAYWRIGHT` to its module location and optionally `KTICKETS_CHROME` to a browser executable. It exercises UI submission/replies/note separation and mobile/keyboard smoke checks. It is supplied but has not completed in the restricted local runner; full manual visual QA remains mandatory. Neither test fixture password is a production credential.
+
+
+## Plugin Check and translations
+
+Version 0.1.1 includes a WordPress-format readme.txt and extractable literal translation strings. Install site-specific MO catalogs under wp-content/languages/plugins/kourentzes-tickets-LOCALE.mo; WordPress loads them on demand. The POT template remains in languages/.
+
+Run Plugin Check against the extracted distributable, not the development repository: the repository intentionally contains tests, workflow files, shell tooling and ZIP artifacts that must never be included in an installed plugin. Example: `wp plugin check /path/to/extracted/kourentzes-tickets --format=json`. No checks, result codes or warnings are excluded by the CI command. Narrow source annotations document the internal machine-code exception, fixed private-page exclusions, externally defined LiteSpeed/cache names and destructive uninstall operations; they do not disable the checks for entire files.
+
+Standalone ticket assets are registered, enqueued and printed through independent WordPress dependency registries. The global theme/plugin asset queues and wp_head/wp_footer remain excluded. Verify actual output after cache/optimization changes, as before.

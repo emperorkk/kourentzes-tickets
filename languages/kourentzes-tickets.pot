@@ -1,8 +1,11 @@
 # Kourentzes Tickets English translation template.
 msgid ""
-msgstr "Project-Id-Version: Kourentzes Tickets 0.1.0\nReport-Msgid-Bugs-To: https://github.com/emperorkk/kourentzes-tickets/issues\nPOT-Creation-Date: 2026-10-24 00:00+0000\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\n"
+msgstr "Project-Id-Version: Kourentzes Tickets 0.1.1\nReport-Msgid-Bugs-To: https://github.com/emperorkk/kourentzes-tickets/issues\nPOT-Creation-Date: 2026-10-24 00:00+0000\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\n"
 
 msgid "A retention hold requires a reason and a future review date."
+msgstr ""
+
+msgid "Access"
 msgstr ""
 
 msgid "Access denied."
@@ -38,6 +41,9 @@ msgstr ""
 msgid "Check the required fields and their length limits."
 msgstr ""
 
+msgid "Closed"
+msgstr ""
+
 msgid "Closed: read-only. Use the new request link to contact us again."
 msgstr ""
 
@@ -69,6 +75,9 @@ msgid "Enabled"
 msgstr ""
 
 msgid "End this ticket session"
+msgstr ""
+
+msgid "Erasure"
 msgstr ""
 
 msgid "Execution environment"
@@ -164,6 +173,12 @@ msgstr ""
 msgid "Not required"
 msgstr ""
 
+msgid "Objection"
+msgstr ""
+
+msgid "Open"
+msgstr ""
+
 msgid "Open your saved private link to access this ticket."
 msgstr ""
 
@@ -195,6 +210,9 @@ msgid "Permanently delete ticket"
 msgstr ""
 
 msgid "Plugin version"
+msgstr ""
+
+msgid "Portability"
 msgstr ""
 
 msgid "Portal page ID"
@@ -245,6 +263,9 @@ msgstr ""
 msgid "Reason for reopening (required when closed)"
 msgstr ""
 
+msgid "Rectification"
+msgstr ""
+
 msgid "Refresh conversation"
 msgstr ""
 
@@ -264,6 +285,12 @@ msgid "Request received. Save your private link now. There are no email notifica
 msgstr ""
 
 msgid "Request type"
+msgstr ""
+
+msgid "Resolved"
+msgstr ""
+
+msgid "Restriction"
 msgstr ""
 
 msgid "Run one cleanup batch"
@@ -320,9 +347,6 @@ msgstr ""
 msgid "Slug"
 msgstr ""
 
-msgid "Soft1 Code assistant"
-msgstr ""
-
 msgid "Soft1 version"
 msgstr ""
 
@@ -330,9 +354,6 @@ msgid "Staff"
 msgstr ""
 
 msgid "Status"
-msgstr ""
-
-msgid "Strict"
 msgstr ""
 
 msgid "Subject (5–160 characters)"
@@ -428,53 +449,11 @@ msgstr ""
 msgid "Waiting for requester"
 msgstr ""
 
+msgid "Website"
+msgstr ""
+
 msgid "Working…"
 msgstr ""
 
 msgid "You"
-msgstr ""
-
-msgid "access"
-msgstr ""
-
-msgid "closed"
-msgstr ""
-
-msgid "erasure"
-msgstr ""
-
-msgid "in_progress"
-msgstr ""
-
-msgid "objection"
-msgstr ""
-
-msgid "open"
-msgstr ""
-
-msgid "other"
-msgstr ""
-
-msgid "portability"
-msgstr ""
-
-msgid "privacy"
-msgstr ""
-
-msgid "rectification"
-msgstr ""
-
-msgid "resolved"
-msgstr ""
-
-msgid "restriction"
-msgstr ""
-
-msgid "suggestion"
-msgstr ""
-
-msgid "technical"
-msgstr ""
-
-msgid "waiting_requester"
 msgstr ""

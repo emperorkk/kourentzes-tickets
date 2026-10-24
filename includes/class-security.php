@@ -6,7 +6,10 @@ final class Security {
     public static function random(int $bytes=32): string { return rtrim(strtr(base64_encode(random_bytes($bytes)), '+/', '-_'), '='); }
     public static function hash(string $value): string { return hash('sha256', $value); }
     public static function hmac(string $value): string { return hash_hmac('sha256', $value, wp_salt('auth')); }
-    public static function fail(string $code, int $status=400): void { throw new Failure($code, $status); }
+    public static function fail(string $code, int $status=400): void {
+        // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- Internal machine code and typed HTTP status, caught by REST::run; not HTML output.
+        throw new Failure($code, $status);
+    }
     public static function secure(): bool { return is_ssl() || (defined('KTICKETS_LOCAL_DEV') && KTICKETS_LOCAL_DEV && wp_get_environment_type()==='local'); }
     public static function origin(\WP_REST_Request $r): bool {
         $origin = $r->get_header('origin');
@@ -20,7 +23,7 @@ final class Security {
         setcookie($name, $value, ['expires'=>$expiry,'path'=>$path,'secure'=>is_ssl(),'httponly'=>true,'samesite'=>'Strict']);
     }
     public static function browser(bool $issue=false): string {
-        $cookie = (string)($_COOKIE['kt_browser'] ?? '');
+        $cookie = sanitize_text_field(wp_unslash($_COOKIE['kt_browser'] ?? ''));
         $parts = explode('.', $cookie);
         if (count($parts)===3 && preg_match('/^[A-Za-z0-9_-]{43}$/D', $parts[0]) && ctype_digit($parts[1]) && (int)$parts[1]>time() && hash_equals(self::hmac('browser:'.$parts[0].'.'.$parts[1]), $parts[2])) { return $parts[0]; }
         if (!$issue) { self::fail('form_expired',403); }
@@ -30,7 +33,7 @@ final class Security {
     }
     // Daily derived keys overlap for a full rolling 24-hour window. Forwarded headers are never trusted.
     public static function networks(): array {
-        $ip = (string)($_SERVER['REMOTE_ADDR'] ?? 'unknown');
+        $ip = sanitize_text_field(wp_unslash($_SERVER['REMOTE_ADDR'] ?? 'unknown'));
         $day=(int)floor(time()/86400);
         return [self::hmac('network:'.$day.':'.$ip), self::hmac('network:'.($day-1).':'.$ip)];
     }
@@ -114,7 +117,7 @@ final class Security {
         self::attack();
     }
     public static function session(array $ticket, \WP_REST_Request $r, bool $mutation): array {
-        $name='kt_s_'.$ticket['public_id']; $raw=(string)($_COOKIE[$name]??'');
+        $name='kt_s_'.$ticket['public_id']; $raw=sanitize_text_field(wp_unslash($_COOKIE[$name]??''));
         if (!preg_match('/^[A-Za-z0-9_-]{43}$/D',$raw)) { self::fail('access_denied',403); }
         $t=Store::table('sessions');
         $session=Store::db()->get_row(Store::db()->prepare("SELECT * FROM $t WHERE session_hash=%s AND ticket_id=%d AND expires_at>%s AND revoked_at IS NULL",self::hash($raw),$ticket['id'],Store::now()),ARRAY_A);

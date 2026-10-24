@@ -7,7 +7,7 @@ root=Path(__file__).resolve().parent.parent
 version=re.search(r'\* Version:\s*([^\s]+)',(root/'kourentzes-tickets.php').read_text()).group(1)
 out=root/'dist';out.mkdir(exist_ok=True)
 target=out/f'kourentzes-tickets-{version}.zip'
-files=[root/'kourentzes-tickets.php',root/'uninstall.php',root/'LICENSE',root/'README.md',root/'CHANGELOG.md']
+files=[root/'kourentzes-tickets.php',root/'uninstall.php',root/'LICENSE',root/'README.md',root/'readme.txt',root/'CHANGELOG.md']
 for folder in ['includes','assets','languages']:
     files += [p for p in (root/folder).rglob('*') if p.is_file()]
 for name in ['RUNBOOK.md','ARCHITECTURE.md','PRIVACY-NOTICE.md','TEST-REPORT.md']:

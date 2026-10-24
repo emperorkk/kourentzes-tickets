@@ -84,6 +84,16 @@ do_action('rest_api_init');wp_set_current_user(0);$bad=new WP_REST_Request('POST
 $bad->set_header('origin','https://evil.test');check(rest_do_request($bad)->get_status()===403,'REST rejects cross-origin mutation');
 $bad->set_header('origin',test_origin());$bad->set_body(str_repeat('x',100001));check(rest_do_request($bad)->get_status()===413,'REST payload bound');
 $admin=new WP_REST_Request('GET','/ktickets/v1/admin/tickets');check(rest_do_request($admin)->get_status()===403,'REST admin rejects guest');
+// Asset printing must not inherit unrelated global queues; labels are translated literals escaped at output.
+wp_enqueue_script('kt-fixture-external','https://third-party.example.test/tracker.js');wp_enqueue_style('kt-fixture-external','https://third-party.example.test/tracker.css');
+ob_start();KTickets\UI::print_standalone_assets(false);KTickets\UI::print_standalone_assets(true);$assets=ob_get_clean();
+check(str_contains($assets,'assets/tickets.css') && str_contains($assets,'assets/tickets.js'),'standalone assets use WordPress dependency registries');
+check(!str_contains($assets,'third-party.example.test'),'standalone registry excludes unrelated global asset queues');
+wp_dequeue_script('kt-fixture-external');wp_dequeue_style('kt-fixture-external');
+$translator=static function ($translation,$text,$domain) { return $domain==='kourentzes-tickets' && $text==='Plugin version'?'<b>Fixture label</b>':$translation; };
+add_filter('gettext',$translator,10,3);$html=KTickets\UI::form(['project'=>'soft1-code-assistant'],false);remove_filter('gettext',$translator,10);
+check(str_contains($html,'&lt;b&gt;Fixture label&lt;/b&gt;') && !str_contains($html,'<b>Fixture label</b>'),'literal field labels are translated and escaped');
+
 // Genuine parallel workers boot independent WordPress connections.
 clear_abuse();$s=Store::settings();$s['manual_attack']=false;$s['attack_valid']=1000;update_option('ktickets_settings',$s,false);$_SERVER['REMOTE_ADDR']='192.0.2.55';$browser=browser();$concurrencyData=data();
 $fixture=['browser'=>$_COOKIE['kt_browser'],'data'=>$concurrencyData];$path=tempnam(sys_get_temp_dir(),'kt-fixture');file_put_contents($path,wp_json_encode($fixture));

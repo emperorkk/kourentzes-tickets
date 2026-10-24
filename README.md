@@ -2,11 +2,11 @@
 
 Standalone WordPress plugin for private anonymous conversations, without email or visitor accounts.
 
-**v0.1.0 — implementation candidate.** Source, an installable ZIP and repeatable tests are included. Public intake starts disabled. This repository has not been deployed to the owner's live website.
+**v0.1.1 — implementation candidate.** Source, an installable ZIP and repeatable tests are included. Public intake starts disabled. This repository has not been deployed to the owner's live website.
 
 ## Install
 
-1. Download `dist/kourentzes-tickets-0.1.0.zip` and upload it under **Plugins → Add New → Upload Plugin**. Activate it.
+1. Download `dist/kourentzes-tickets-0.1.1.zip` and upload it under **Plugins → Add New → Upload Plugin**. Activate it.
 2. Open **Settings → Ticket setup**, explicitly select Konstantinos Kourentzes' existing WordPress account, and create the three ticket pages. No administrator role or other user receives ticket access automatically.
 3. As that selected owner, open **Tickets → Settings and health**. Publish the completed privacy notice, enter its HTTPS URL and verify the created page IDs.
 4. Follow [the deployment runbook](docs/RUNBOOK.md), including live cache/analytics exclusions and synthetic tests. Then acknowledge verification and enable intake.

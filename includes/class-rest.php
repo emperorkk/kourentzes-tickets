@@ -22,7 +22,7 @@ final class REST {
         },10,3);
         add_filter('rest_pre_dispatch',static function ($result,$server,$request) {
             if (!str_starts_with($request->get_route(),'/ktickets/v1')) { return $result; }
-            if (strlen($request->get_body())>100000 || (int)($_SERVER['CONTENT_LENGTH']??0)>100000) { return new \WP_Error('payload_too_large',__('The request is too large.','kourentzes-tickets'),['status'=>413]); }
+            if (strlen($request->get_body())>100000 || absint(wp_unslash($_SERVER['CONTENT_LENGTH']??0))>100000) { return new \WP_Error('payload_too_large',__('The request is too large.','kourentzes-tickets'),['status'=>413]); }
             return $result;
         },10,3);
     }

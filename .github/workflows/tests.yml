@@ -23,7 +23,7 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
-          extensions: mysqli, mbstring
+          extensions: mysqli, mbstring, dom, xml, simplexml, xmlreader, xmlwriter
           tools: wp-cli
       - name: Syntax
         run: |
@@ -40,6 +40,13 @@ jobs:
         run: bash scripts/test-integration.sh
       - name: Package
         run: python3 scripts/package.py
+      - name: Plugin Check on the distributable
+        run: |
+          wp plugin install plugin-check --version=2.1.0 --activate --path=/tmp/kt-wordpress
+          mkdir -p /tmp/kt-package
+          unzip -q dist/kourentzes-tickets-0.1.1.zip -d /tmp/kt-package
+          wp --no-color plugin check /tmp/kt-package/kourentzes-tickets --format=json --path=/tmp/kt-wordpress | tee /tmp/kt-plugin-check.txt
+          grep -Fxq 'Success: Checks complete. No errors found.' /tmp/kt-plugin-check.txt
       - uses: actions/upload-artifact@v4
         with:
           name: kourentzes-tickets

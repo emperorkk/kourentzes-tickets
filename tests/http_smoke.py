@@ -18,12 +18,15 @@ setup = soup.find('input', {'name':'action','value':'ktickets_setup'})
 assert setup, 'fixture must start with no ticket owner'
 form = setup.find_parent('form')
 nonce = form.find('input',{'name':'_wpnonce'})['value']
+assert admin.post(base + '/wp-admin/admin-post.php', data={'action':'ktickets_setup','owner':'1','_wpnonce':'invalid'}).status_code==403
 r = admin.post(base + '/wp-admin/admin-post.php', data={'action':'ktickets_setup','owner':'1','_wpnonce':nonce})
 r.raise_for_status()
 soup = BeautifulSoup(r.text,'html.parser')
 form = soup.find('input', {'name':'action','value':'ktickets_settings'}).find_parent('form')
 settings = {i['name']:i.get('value','') for i in form.find_all('input') if i.get('name') and i.get('type')!='checkbox'}
 settings.update({'verified':'on','enabled':'on','policy_url':'https://example.test/privacy'})
+assert admin.post(base + '/wp-admin/admin-post.php', data={**settings,'_wpnonce':'invalid'}).status_code==403
+assert admin.post(base + '/wp-admin/admin-post.php', data={'action':'ktickets_project','slug':'bad-fixture','name':'Bad fixture','categories[]':'technical','_wpnonce':'invalid'}).status_code==403
 r = admin.post(base + '/wp-admin/admin-post.php', data=settings)
 r.raise_for_status()
 guest = requests.Session()

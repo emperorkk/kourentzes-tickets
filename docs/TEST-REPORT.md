@@ -41,3 +41,17 @@ Public intake defaults to disabled. Complete the runbook and outstanding live/br
 ## Final local result
 
 79 integration/security assertions passed. All plugin/fixture PHP files and the frontend JavaScript passed syntax checks. The HTTP suite passed with namespace-specific CORS restrictions and cross-origin guest-read rejection included. Package integrity/root-path checks passed when building the distributable. Remote CI is configured but remains a separate, unclaimed verification result.
+
+
+## v0.1.1 maintenance verification
+
+The owner supplied a Plugin Check report for the installed v0.1.0 package. The follow-up fixes replace dynamic gettext arguments with literal declarations, perform configuration escaping at the output boundary, make nonce checks visible in each admin write handler, normalize superglobal inputs, isolate global variables in uninstall, prepare DROP TABLE identifiers with `%i`, use independent WordPress asset registries and add the required WordPress readme metadata.
+
+Local results on the same WordPress 7.1.3 / PHP 8.3.6 / MariaDB 10.11.14 fixture:
+
+- 82 integration/security assertions passed, including three new checks for isolated asset queues and translated/escaped field labels.
+- The HTTP suite passed again, including rejection of invalid nonces for owner setup, settings and project changes, as well as the existing guest/session/origin/CORS checks.
+- Plugin Check **2.1.0** was run with default checks against the extracted **v0.1.1 distributable**: **no errors or warnings were returned**. No CLI checks/codes/warnings were excluded, and no AI analysis was used. Narrow source-level annotations explain unavoidable internal typed exception data, three-page privacy exclusions, external cache integration names and explicit destructive uninstall schema operations.
+- PHP syntax, JavaScript syntax and ZIP integrity checks passed.
+
+The original v0.1.0 GitHub Actions run also completed successfully on the configured PHP 8.2 job. The updated v0.1.1 workflow adds a Plugin Check gate against the extracted ZIP. Its remote outcome is separate from these executed local results. Exact production patch versions, live-stack verification and browser visual/keyboard QA remain outstanding.
