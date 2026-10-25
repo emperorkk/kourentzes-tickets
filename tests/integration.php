@@ -137,6 +137,11 @@ $beforeSuppress=Store::db()->suppress_errors;
 try { Security::serialized(function () { Store::sql('SELECT missing_column FROM '.Store::table('tickets')); }); } catch (RuntimeException $e) { check($e->getMessage()==='storage_unavailable','database failure is controlled'); }
 check(Store::db()->suppress_errors===$beforeSuppress,'database error suppression restored');
 check(wp_next_scheduled('ktickets_cleanup')!==false,'cleanup scheduled');
+// Central appearance is independent of ticket credentials and can bridge the site's theme.
+$look=Store::settings();$look['appearance']='dark';$look['site_theme_key']='site.color';update_option('ktickets_settings',$look,false);
+check(KTickets\Appearance::config()['mode']==='dark','central appearance setting is propagated');check(KTickets\Appearance::config()['key']==='site.color','explicit site preference key is propagated');
+$bridge=static fn($mode)=>'light';add_filter('ktickets_site_theme',$bridge);check(KTickets\Appearance::config()['site']==='light','central site theme filter is respected');remove_filter('ktickets_site_theme',$bridge);
+$look['appearance']='site';$look['site_theme_key']='';update_option('ktickets_settings',$look,false);
 // Site administrators retain configuration access independently of ticket authorization.
 wp_set_current_user($other);check(Security::can_settings(),'administrator without ticket capabilities can manage settings');check(!current_user_can('view_ktickets'),'settings access does not auto-grant ticket access');
 ob_start();KTickets\UI::settings_page();$settingsHtml=ob_get_clean();check(str_contains($settingsHtml,'ktickets_owner') && str_contains($settingsHtml,'Change ticket owner'),'settings include explicit owner transfer');

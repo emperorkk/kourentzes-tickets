@@ -52,7 +52,7 @@ for (const root of document.querySelectorAll('[data-kt-config]')) {
     function messages(items, container, prepend = false) {
         const fragment = document.createDocumentFragment();
         for (const m of items) {
-            const article = node('article', undefined, m.visibility === 'internal' ? 'kt-message kt-internal' : 'kt-message');
+            const article = node('article', undefined, m.visibility === 'internal' ? 'kt-message kt-internal' : (m.author_type === 'staff' ? 'kt-message kt-message-staff' : 'kt-message'));
             const time = node('time', new Date(m.created_at.replace(' ', 'T') + 'Z').toLocaleString()); time.dateTime = m.created_at.replace(' ', 'T') + 'Z';
             article.append(node('strong', m.visibility === 'internal' ? s.internal : (m.author_type === 'staff' ? s.staff : s.guest)), time, node('pre', m.body)); fragment.append(article);
         }
@@ -68,47 +68,83 @@ for (const root of document.querySelectorAll('[data-kt-config]')) {
             notice(s.working);
             const data = { ...formData(form), acknowledge: form.elements.acknowledge.checked, project: c.project, form_token: token, secret: pending.secret, idempotency: pending.idempotency };
             const receipt = await api(c.privacy ? 'privacy/tickets' : 'tickets', 'POST', data);
-            accessLink(receipt, pending.secret); pending = null; form.reset(); form.hidden = true;
+            accessLink(receipt, pending.secret); pending = null; form.reset(); form.hidden = true; $('.kt-form-heading').hidden = true;
         }));
         // Pending secret exists in memory only and disappears on reload/navigation or after 15 minutes.
         window.addEventListener('pagehide', () => { pending = null; });
     }
     if (c.mode === 'portal') {
         const params = new URLSearchParams(location.hash.slice(1));
-        const reference = params.get('ticket'), key = params.get('key');
+        let reference = params.get('ticket'), key = params.get('key');
+        const openForm = $('.kt-open-link');
         history.replaceState(null, '', location.pathname + location.search);
         async function load(older = false) {
             const data = await api('tickets/' + reference + (older && olderCursor ? '?before=' + olderCursor : ''));
             ticket = data;
             if (!older) {
-                notice(data.status === 'closed' ? s.closed : (data.moderation_state === 'quarantine' ? s.pending : s.status + ': ' + data.status));
-                const summary = node('div'); summary.append(node('h2', data.subject), node('p', data.purge_at ? s.retention + ': ' + new Date(data.purge_at.replace(' ', 'T') + 'Z').toLocaleString() : s.noPurge));
+                notice(data.status === 'closed' ? s.closed : (data.moderation_state === 'quarantine' ? s.pending : s.status + ': ' + (c.labels[data.status] || data.status)));
+                const summary = node('div'); const badge = node('span', c.labels[data.status] || data.status, 'kt-status'); badge.dataset.status = data.status; summary.append(badge, node('h2', data.subject), node('p', data.purge_at ? s.retention + ': ' + new Date(data.purge_at.replace(' ', 'T') + 'Z').toLocaleString() : s.noPurge));
                 $('.kt-conversation').replaceChildren(summary, node('div', undefined, 'kt-messages'));
             }
             messages(data.messages, $('.kt-messages'), older); olderCursor = data.next_before;
             $('.kt-older').hidden = !olderCursor; $('.kt-reply').hidden = data.status === 'closed'; $('.kt-refresh').hidden = false; $('.kt-logout').hidden = false;
         }
-        if (!reference || !/^[a-f0-9]{32}$/.test(reference) || !key) { notice(s.needKey); }
-        else {
-            work(async () => { const data = await api('access/exchange', 'POST', { ticket: reference, key }); csrf = data.csrf; await load(); })();
-            params.delete('key');
+        async function open() {
+            try {
+                const data = await api('access/exchange', 'POST', { ticket: reference, key }); csrf = data.csrf;
+                openForm.hidden = true; await load();
+            } finally { key = ''; }
         }
+        if (!reference || !/^[a-f0-9]{32}$/.test(reference) || !key) { notice(s.needKey); }
+        else { work(open)(); }
+        params.delete('key');
+        openForm.addEventListener('submit', work(async () => {
+            const value = openForm.elements.private_link.value; openForm.reset();
+            let url;
+            try { url = new URL(value, location.href); } catch { throw new Error(s.invalidLink); }
+            const fragment = new URLSearchParams(url.hash.slice(1));
+            reference = fragment.get('ticket'); key = fragment.get('key');
+            if (url.origin !== new URL(c.api).origin || !/^[a-f0-9]{32}$/.test(reference || '') || !/^[A-Za-z0-9_-]{43}$/.test(key || '')) { key = ''; throw new Error(s.invalidLink); }
+            await open();
+        }));
         $('.kt-reply').addEventListener('submit', work(async () => { await api('tickets/' + reference + '/messages', 'POST', { body: $('.kt-reply').elements.body.value, revision: ticket.revision }); $('.kt-reply').reset(); await load(); }));
         $('.kt-privacy-request').addEventListener('click', work(async () => { const form = $('.kt-reply'); if (!form.reportValidity()) return; await api('tickets/' + reference + '/privacy-request', 'POST', { body: form.elements.body.value, revision: ticket.revision }); form.reset(); await load(); }));
         $('.kt-refresh').addEventListener('click', work(() => load()));
         $('.kt-older').addEventListener('click', work(() => load(true)));
-        $('.kt-logout').addEventListener('click', work(async () => { await api('access/logout', 'POST', { ticket: reference }); csrf = ''; $('.kt-conversation').replaceChildren(); $('.kt-reply').hidden = true; $('.kt-refresh').hidden = true; $('.kt-logout').hidden = true; $('.kt-older').hidden = true; notice(s.needKey); }));
+        $('.kt-logout').addEventListener('click', work(async () => { await api('access/logout', 'POST', { ticket: reference }); csrf = ''; openForm.hidden = false; $('.kt-conversation').replaceChildren(); $('.kt-reply').hidden = true; $('.kt-refresh').hidden = true; $('.kt-logout').hidden = true; $('.kt-older').hidden = true; notice(s.needKey); }));
     }
     if (c.mode === 'admin') {
         let filters = {}, exportBefore = 0;
+        const composeTabs = [...root.querySelectorAll('[data-kt-compose]')];
+        for (const tab of composeTabs) {
+            tab.addEventListener('click', () => {
+                const internal = tab.dataset.ktCompose === 'internal';
+                $('.kt-admin-reply').hidden = internal; $('.kt-admin-note').hidden = !internal;
+                for (const item of composeTabs) { item.setAttribute('aria-selected', String(item === tab)); item.tabIndex = item === tab ? 0 : -1; }
+            });
+            tab.addEventListener('keydown', event => {
+                if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+                event.preventDefault(); const next = event.key === 'Home' ? composeTabs[0] : event.key === 'End' ? composeTabs.at(-1) : composeTabs[(composeTabs.indexOf(tab) + 1) % composeTabs.length]; next.click(); next.focus();
+            });
+        }
+
         async function list() {
             const rows = await api('admin/tickets?' + new URLSearchParams({ ...filters, page }));
-            const table = node('table', undefined, 'widefat striped'); const body = node('tbody');
+            const inbox = node('div', undefined, 'kt-inbox');
             for (const t of rows) {
-                const tr = node('tr'), td = node('td'), link = node('button', t.subject); link.type = 'button'; link.className = 'button-link'; link.onclick = work(() => detail(t.id)); td.append(link);
-                tr.append(td, node('td', t.public_id), node('td', t.category), node('td', t.status), node('td', t.moderation_state + (Number(t.abuse_flag) ? ' ⚑' : ''))); body.append(tr);
+                const card = node('button', undefined, 'kt-inbox-ticket'); card.type = 'button';
+                const info = node('span'), tags = node('span', undefined, 'kt-inbox-tags');
+                const title = node('span', t.subject, 'kt-inbox-title');
+                info.append(title, node('span', (c.labels[t.category] || t.category) + ' · ' + t.public_id + ' · ' + new Date(t.updated_at.replace(' ', 'T') + 'Z').toLocaleDateString(), 'kt-inbox-meta'));
+                const status = node('span', c.labels[t.status] || t.status, 'kt-status'); status.dataset.status = t.status; tags.append(status);
+                if (t.moderation_state === 'quarantine') tags.append(node('span', s.pending, 'kt-status'));
+                if (Number(t.abuse_flag)) tags.append(node('span', s.flagged, 'kt-status'));
+                card.append(info, tags); card.onclick = work(() => detail(t.id));
+                if (ticket && Number(ticket.id) === Number(t.id)) card.setAttribute('aria-current', 'true');
+                inbox.append(card);
             }
-            table.append(body); $('.kt-admin-list').replaceChildren(table); $('.kt-prev').disabled = page <= 1; $('.kt-next').disabled = rows.length < 20;
+            if (!rows.length) { const empty = node('div', undefined, 'kt-empty'); empty.append(node('h2', s.emptyTitle), node('p', s.emptyBody)); inbox.append(empty); }
+            $('.kt-admin-list').replaceChildren(inbox); $('.kt-prev').disabled = page <= 1; $('.kt-next').disabled = rows.length < 20;
         }
         async function detail(id, older = false) {
             if (!older) { before = 0; exportBefore = 0; }
@@ -116,14 +152,15 @@ for (const root of document.querySelectorAll('[data-kt-config]')) {
             const ordered = [...t.messages].reverse();
             if (older) { exportBefore = olderCursor; messages(ordered, $('.kt-conversation'), true); } else { messages(ordered, $('.kt-conversation')); }
             olderCursor = t.messages.length === 20 ? Number(t.messages[t.messages.length - 1].id) : null; $('.kt-older').hidden = !olderCursor;
-            $('.kt-admin-detail').hidden = false; $('.kt-subject').textContent = t.subject + ' [' + t.status + ']';
+            $('.kt-admin-detail').hidden = false; $('.kt-subject').textContent = t.subject;
+            for (const card of root.querySelectorAll('.kt-inbox-ticket')) card.removeAttribute('aria-current');
             const form = $('.kt-admin-update');
             for (const name of ['status', 'category', 'assigned_to', 'moderation_state']) if (form.elements[name]) form.elements[name].value = t[name] || (name === 'assigned_to' ? '0' : '');
             form.elements.abuse_flag.checked = Boolean(Number(t.abuse_flag)); form.elements.moderation_state.disabled = t.category === 'privacy';
             if ($('.kt-admin-privacy')) {
                 const p = t.privacy || {};
                 for (const name of ['request_type', 'verification_status', 'target_due_at', 'extension_reason', 'outcome', 'hold_reason', 'hold_review_at']) $('.kt-admin-privacy').elements[name].value = p[name] || (name === 'request_type' ? 'other' : name === 'verification_status' ? 'unverified' : '');
-                $('.kt-received').textContent = JSON.stringify({ received_at: p.received_at || null, hold_actor: p.hold_actor || null });
+                $('.kt-received').textContent = p.received_at ? s.received + ': ' + new Date(p.received_at.replace(' ', 'T') + 'Z').toLocaleString() : '';
             }
             $('.kt-audit').textContent = JSON.stringify({ revision: t.revision, abuse_reasons: JSON.parse(t.abuse_reason_codes || '[]'), environment: JSON.parse(t.environment || '{}'), closed_at: t.closed_at, purge_at: t.purge_at, events: t.events }, null, 2);
             if (!older) $('.kt-subject').focus();

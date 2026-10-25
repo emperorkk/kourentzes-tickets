@@ -24,7 +24,7 @@ r.raise_for_status()
 soup = BeautifulSoup(r.text,'html.parser')
 form = soup.find('input', {'name':'action','value':'ktickets_settings'}).find_parent('form')
 settings = {i['name']:i.get('value','') for i in form.find_all('input') if i.get('name') and i.get('type')!='checkbox'}
-settings.update({'verified':'on','enabled':'on','policy_url':'https://example.test/privacy'})
+settings.update({'verified':'on','enabled':'on','policy_url':'https://example.test/privacy','appearance':'dark','site_theme_key':''})
 assert admin.post(base + '/wp-admin/admin-post.php', data={**settings,'_wpnonce':'invalid'}).status_code==403
 assert admin.post(base + '/wp-admin/admin-post.php', data={'action':'ktickets_project','slug':'bad-fixture','name':'Bad fixture','categories[]':'technical','_wpnonce':'invalid'}).status_code==403
 r = admin.post(base + '/wp-admin/admin-post.php', data=settings)
@@ -37,7 +37,11 @@ assert r.headers['Referrer-Policy']=='no-referrer'
 assert "default-src 'none'" in r.headers['Content-Security-Policy']
 soup=BeautifulSoup(r.text,'html.parser')
 assert not soup.find_all('script',src=lambda src:src and not src.startswith(base))
-assert len(soup.find_all('script'))==1
+assert len(soup.find_all('script'))==2
+assert soup.find('html').has_attr('data-kt-appearance')
+assert soup.find('select',{'data-kt-theme-control':True})
+assert soup.find('nav',{'aria-label':'Ticket navigation'})
+assert json.loads(soup.find('html')['data-kt-appearance'])['mode']=='dark'
 c=json.loads(soup.find(attrs={'data-kt-config':True})['data-kt-config'])
 origin=urlparse(base).scheme+'://'+urlparse(base).netloc
 

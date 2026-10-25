@@ -1,6 +1,21 @@
 # Kourentzes Tickets English translation template.
 msgid ""
-msgstr "Project-Id-Version: Kourentzes Tickets 0.1.2\nReport-Msgid-Bugs-To: https://github.com/emperorkk/kourentzes-tickets/issues\nPOT-Creation-Date: 2026-10-24 00:00+0000\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\n"
+msgstr "Project-Id-Version: Kourentzes Tickets 0.2.0\nReport-Msgid-Bugs-To: https://github.com/emperorkk/kourentzes-tickets/issues\nPOT-Creation-Date: 2026-10-24 00:00+0000\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\n"
+
+msgid "A DIRECT LINE TO US"
+msgstr ""
+
+msgid "A clear inbox. A fresh start."
+msgstr ""
+
+msgid "A few details now make a better answer possible."
+msgstr ""
+
+msgid "A little space for a better conversation."
+msgstr ""
+
+msgid "A question, an idea, something that isn’t working? Tell us what’s on your mind."
+msgstr ""
 
 msgid "A retention hold requires a reason and a future review date."
 msgstr ""
@@ -14,6 +29,12 @@ msgstr ""
 msgid "Access denied. Check your private link."
 msgstr ""
 
+msgid "Activity & technical context"
+msgstr ""
+
+msgid "Add optional details"
+msgstr ""
+
 msgid "Alias (optional)"
 msgstr ""
 
@@ -23,10 +44,16 @@ msgstr ""
 msgid "All permitted"
 msgstr ""
 
+msgid "Appearance"
+msgstr ""
+
+msgid "Appearance and site integration"
+msgstr ""
+
 msgid "Assign owner and create ticket pages"
 msgstr ""
 
-msgid "Assigned WordPress user ID (0 = unassigned)"
+msgid "Assigned team member"
 msgstr ""
 
 msgid "Attack threshold / failed attempts in 5 minutes"
@@ -35,13 +62,25 @@ msgstr ""
 msgid "Attack threshold / valid attempts in 10 minutes"
 msgstr ""
 
+msgid "Automatic"
+msgstr ""
+
+msgid "Back to website"
+msgstr ""
+
 msgid "Category"
+msgstr ""
+
+msgid "Central ticket appearance"
 msgstr ""
 
 msgid "Change ticket owner"
 msgstr ""
 
 msgid "Check the required fields and their length limits."
+msgstr ""
+
+msgid "Choose the central appearance for every ticket page. Automatic visitor mode follows this setting; visitors may explicitly choose light or dark."
 msgstr ""
 
 msgid "Closed"
@@ -68,10 +107,10 @@ msgstr ""
 msgid "Creation limit / rolling 24 hours"
 msgstr ""
 
-msgid "Description (20–20,000 characters; plain text)"
+msgid "Dark"
 msgstr ""
 
-msgid "Do not include passwords, access tokens, databases or unnecessary personal data about others. A technical report does not create a support contract or guarantee a solution."
+msgid "Details"
 msgstr ""
 
 msgid "Download access file"
@@ -92,6 +131,9 @@ msgstr ""
 msgid "Execution environment"
 msgstr ""
 
+msgid "Existing site theme preference key (optional)"
+msgstr ""
+
 msgid "Export this message page (JSON, including notes)"
 msgstr ""
 
@@ -102,6 +144,12 @@ msgid "Filter"
 msgstr ""
 
 msgid "Flag for review"
+msgstr ""
+
+msgid "Follow the WordPress site theme"
+msgstr ""
+
+msgid "Follow the visitor’s device"
 msgstr ""
 
 msgid "General form page ID"
@@ -140,6 +188,12 @@ msgstr ""
 msgid "Invalid project."
 msgstr ""
 
+msgid "Just between us."
+msgstr ""
+
+msgid "Keep the details together, follow the progress and pick up where you left off."
+msgstr ""
+
 msgid "Kourentzes Tickets requires a single-site installation."
 msgstr ""
 
@@ -149,7 +203,13 @@ msgstr ""
 msgid "Last ownership change (UTC)"
 msgstr ""
 
+msgid "Let’s work through it."
+msgstr ""
+
 msgid "Lifecycle status"
+msgstr ""
+
+msgid "Light"
 msgstr ""
 
 msgid "Load older messages"
@@ -182,6 +242,12 @@ msgstr ""
 msgid "No email or account is required. Save the private link after submission and return to check for replies."
 msgstr ""
 
+msgid "No public threads. No account required. Your private link is your access key."
+msgstr ""
+
+msgid "No tickets match these filters. Try another view or check back later."
+msgstr ""
+
 msgid "Normal"
 msgstr ""
 
@@ -191,7 +257,13 @@ msgstr ""
 msgid "Objection"
 msgstr ""
 
+msgid "Only needed if your site already stores its central light/dark choice in localStorage. Enter that exact key; supported values are light, dark, auto or system. Leave blank for the WordPress theme setting."
+msgstr ""
+
 msgid "Open"
+msgstr ""
+
+msgid "Open conversation"
 msgstr ""
 
 msgid "Open your saved private link to access this ticket."
@@ -209,7 +281,16 @@ msgstr ""
 msgid "Owner setup is already complete."
 msgstr ""
 
+msgid "PRIVACY & PERSONAL DATA"
+msgstr ""
+
 msgid "Page creation failed. Intake remains disabled."
+msgstr ""
+
+msgid "Paste a valid private link from this website."
+msgstr ""
+
+msgid "Paste the private link you saved when you submitted your request."
 msgstr ""
 
 msgid "Pending"
@@ -224,6 +305,12 @@ msgstr ""
 msgid "Permanently delete ticket"
 msgstr ""
 
+msgid "Pick up the conversation."
+msgstr ""
+
+msgid "Please don’t share passwords, access tokens, databases or unnecessary personal data about other people."
+msgstr ""
+
 msgid "Plugin version"
 msgstr ""
 
@@ -236,6 +323,12 @@ msgstr ""
 msgid "Previous page"
 msgstr ""
 
+msgid "Privacy"
+msgstr ""
+
+msgid "Privacy & data"
+msgstr ""
+
 msgid "Privacy / personal data"
 msgstr ""
 
@@ -243,6 +336,9 @@ msgid "Privacy / personal data request"
 msgstr ""
 
 msgid "Privacy form page ID"
+msgstr ""
+
+msgid "Privacy handling & retention"
 msgstr ""
 
 msgid "Privacy handling and retention hold"
@@ -255,6 +351,9 @@ msgid "Privacy notice"
 msgstr ""
 
 msgid "Privacy request"
+msgstr ""
+
+msgid "Private by design. Human at the other end."
 msgstr ""
 
 msgid "Proactively enable attack mode for general intake"
@@ -275,7 +374,13 @@ msgstr ""
 msgid "Quarantine"
 msgstr ""
 
+msgid "Questions about your personal data deserve a clear, private answer. Start here."
+msgstr ""
+
 msgid "Reason for reopening (required when closed)"
+msgstr ""
+
+msgid "Received"
 msgstr ""
 
 msgid "Rectification"
@@ -311,7 +416,16 @@ msgstr ""
 msgid "Restriction"
 msgstr ""
 
+msgid "Review flag"
+msgstr ""
+
 msgid "Run one cleanup batch"
+msgstr ""
+
+msgid "START A CONVERSATION"
+msgstr ""
+
+msgid "SUPPORT & CONVERSATIONS"
 msgstr ""
 
 msgid "Save internal note"
@@ -368,6 +482,9 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
+msgid "Skip to content"
+msgstr ""
+
 msgid "Slug"
 msgstr ""
 
@@ -380,7 +497,7 @@ msgstr ""
 msgid "Status"
 msgstr ""
 
-msgid "Subject (5–160 characters)"
+msgid "Subject"
 msgstr ""
 
 msgid "Submit private request"
@@ -396,6 +513,9 @@ msgid "Target due date (UTC: YYYY-MM-DD HH:MM:SS)"
 msgstr ""
 
 msgid "Technical issue"
+msgstr ""
+
+msgid "Technical reports do not create a support contract or guarantee a resolution."
 msgstr ""
 
 msgid "Terms"
@@ -452,6 +572,9 @@ msgstr ""
 msgid "Ticket settings"
 msgstr ""
 
+msgid "Ticket settings & assignment"
+msgstr ""
+
 msgid "Ticket settings and health"
 msgstr ""
 
@@ -462,6 +585,9 @@ msgid "Tickets"
 msgstr ""
 
 msgid "Too many requests. Wait before trying again. Your request has not been received."
+msgstr ""
+
+msgid "Unassigned"
 msgstr ""
 
 msgid "Unverified"
@@ -476,10 +602,16 @@ msgstr ""
 msgid "Verified"
 msgstr ""
 
+msgid "WELCOME BACK"
+msgstr ""
+
 msgid "Waiting for requester"
 msgstr ""
 
 msgid "Website"
+msgstr ""
+
+msgid "What can we help with?"
 msgstr ""
 
 msgid "WordPress administrators retain access to settings. Changing the owner grants ticket permissions to the selected account and removes them from the previous owner. Tickets, visitor links, messages and WordPress roles are preserved."
@@ -488,5 +620,23 @@ msgstr ""
 msgid "Working…"
 msgstr ""
 
+msgid "YOUR PRIVATE CONVERSATION"
+msgstr ""
+
+msgid "YOUR REQUEST CENTER"
+msgstr ""
+
 msgid "You"
+msgstr ""
+
+msgid "Your conversation"
+msgstr ""
+
+msgid "Your data. Your voice."
+msgstr ""
+
+msgid "Your privacy request"
+msgstr ""
+
+msgid "Your saved private link"
 msgstr ""

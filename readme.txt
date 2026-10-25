@@ -3,7 +3,7 @@ Tags: tickets, privacy, support
 Requires at least: 7.1.3
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 0.1.2
+Stable tag: 0.2.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -47,6 +47,10 @@ Yes. Use the supplied POT template and install the matching MO file in wp-conten
 
 == Changelog ==
 
+= 0.2.0 =
+
+Redesigned responsive ticket interface with light, dark and Automatic appearance, central theme integration, saved-link reopening and improved staff workflows.
+
 = 0.1.2 =
 
 Keep settings available to WordPress administrators and add explicit owner transfer with confirmation and stale-form protection. Preserve tickets, visitor links and WordPress roles.
@@ -62,6 +66,6 @@ Initial implementation candidate with private guest sessions, owner-only setup, 
 
 == Upgrade Notice ==
 
-= 0.1.2 =
+= 0.2.0 =
 
-Keep settings accessible to WordPress administrators and support explicit ticket-owner transfer. Existing tickets, capabilities and settings are preserved. Public intake remains subject to live verification.
+New responsive interface with light, dark and Automatic themes. Existing tickets, owner settings and visitor access links are preserved.

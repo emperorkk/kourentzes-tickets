@@ -29,6 +29,8 @@ jobs:
         run: |
           find . -name '*.php' -print0 | xargs -0 -n1 php -l
           node --check assets/tickets.js
+          node --check assets/theme.js
+          node tests/theme.cjs
       - name: WordPress integration with concurrent workers
         env:
           KTICKETS_TESTING: '1'
@@ -44,7 +46,7 @@ jobs:
         run: |
           wp plugin install plugin-check --version=2.1.0 --activate --path=/tmp/kt-wordpress
           mkdir -p /tmp/kt-package
-          unzip -q dist/kourentzes-tickets-0.1.2.zip -d /tmp/kt-package
+          unzip -q dist/kourentzes-tickets-0.2.0.zip -d /tmp/kt-package
           wp --no-color plugin check /tmp/kt-package/kourentzes-tickets --format=json --path=/tmp/kt-wordpress | tee /tmp/kt-plugin-check.txt
           grep -Fxq 'Success: Checks complete. No errors found.' /tmp/kt-plugin-check.txt
       - uses: actions/upload-artifact@v4

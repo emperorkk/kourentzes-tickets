@@ -43,7 +43,7 @@ final class Store {
         return ['manage_ktickets_settings','view_ktickets','view_all_ktickets','reply_ktickets','assign_ktickets','view_ktickets_privacy','manage_ktickets_privacy','delete_ktickets'];
     }
     public static function defaults(): array {
-        return ['enabled'=>false,'verified'=>false,'portal_page'=>0,'form_page'=>0,'privacy_page'=>0,'policy_url'=>'','terms_url'=>'','owner'=>0,'delete_on_uninstall'=>false,'manual_attack'=>false,'create_short'=>2,'create_day'=>5,'attack_valid'=>20,'attack_failed'=>50,'quarantine_capacity'=>100,'network_reply'=>40];
+        return ['appearance'=>'site','site_theme_key'=>'','enabled'=>false,'verified'=>false,'portal_page'=>0,'form_page'=>0,'privacy_page'=>0,'policy_url'=>'','terms_url'=>'','owner'=>0,'delete_on_uninstall'=>false,'manual_attack'=>false,'create_short'=>2,'create_day'=>5,'attack_valid'=>20,'attack_failed'=>50,'quarantine_capacity'=>100,'network_reply'=>40];
     }
     public static function settings(): array { return array_merge(self::defaults(), (array)get_option('ktickets_settings', [])); }
     public static function install(): void {

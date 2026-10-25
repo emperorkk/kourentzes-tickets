@@ -2,11 +2,11 @@
 
 Standalone WordPress plugin for private anonymous conversations, without email or visitor accounts.
 
-**v0.1.2 — implementation candidate.** Source, an installable ZIP and repeatable tests are included. Public intake starts disabled. This repository has not been deployed to the owner's live website.
+**v0.2.0 — implementation candidate.** Source, an installable ZIP and repeatable tests are included. Public intake starts disabled. This repository has not been deployed to the owner's live website.
 
 ## Install
 
-1. Download `dist/kourentzes-tickets-0.1.2.zip` and upload it under **Plugins → Add New → Upload Plugin**. Activate it.
+1. Download `dist/kourentzes-tickets-0.2.0.zip` and upload it under **Plugins → Add New → Upload Plugin**. Activate it.
 2. Open **Settings → Ticket setup**, explicitly select Konstantinos Kourentzes' existing WordPress account, and create the three ticket pages. No administrator role or other user receives ticket access automatically.
 3. As that selected owner, open **Settings → Ticket settings**. Publish the completed privacy notice, enter its HTTPS URL and verify the created page IDs.
 4. Follow [the deployment runbook](docs/RUNBOOK.md), including live cache/analytics exclusions and synthetic tests. Then acknowledge verification and enable intake.
@@ -35,7 +35,7 @@ All interface text and documentation are English; a translation template is incl
 
 ## Verification and limits
 
-See [TEST-REPORT.md](docs/TEST-REPORT.md) for executed checks and [ARCHITECTURE.md](docs/ARCHITECTURE.md) for security/limit choices. Reported deployment targets are WordPress 7.1.3 / PHP 8.2.34 / MariaDB 10.11.19; exact target PHP/DB versions and the production plugin stack remain unverified. Browser visual/keyboard QA is outstanding.
+See [TEST-REPORT.md](docs/TEST-REPORT.md) for executed checks and [ARCHITECTURE.md](docs/ARCHITECTURE.md) for security/limit choices. Reported deployment targets are WordPress 7.1.3 / PHP 8.2.34 / MariaDB 10.11.19; exact target PHP/DB versions and the production plugin stack remain unverified. Local Chromium browser flows and responsive layouts were exercised; production theme/cache integration still requires verification.
 
 The [specification](docs/SPECIFICATION.md), [environment](docs/ENVIRONMENT.md) and [privacy notice draft](docs/PRIVACY-NOTICE.md) remain the product/deployment baseline. No production credentials or real tickets are stored here.
 
@@ -48,3 +48,9 @@ For a disposable WordPress database, set `KTICKETS_TESTING=1`, `KTICKETS_WP_PATH
 License: GPL-2.0-or-later.
 
 To change the responsible user later, open **Settings → Ticket settings → Ticket owner**, select the existing account and confirm **Change ticket owner**. The previous owner loses ticket grants, while WordPress administrators retain settings access. Ticket data and visitor links are preserved.
+
+## Appearance
+
+The interface uses the site’s charcoal, purple and lavender palette. Open **Settings → Ticket settings → Appearance and site integration** to choose the central appearance. Visitor **Automatic** follows that setting; **Light** and **Dark** are explicit visitor overrides. The default follows the WordPress theme color scheme, with dark theme names recognized and device preference as fallback.
+
+For an existing custom site switch, enter its exact localStorage preference key (values `light`, `dark`, `auto`, `system`), or bridge a server-side setting through the `ktickets_site_theme` filter. Arbitrary theme scripts are not loaded inside the private portal. The only plugin localStorage preference is `ktickets.appearance`; it contains no ticket credentials or content.

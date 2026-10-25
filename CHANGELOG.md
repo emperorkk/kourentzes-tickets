@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.0 — 25 October 2026
+
+Redesign the visitor portal, request forms, inbox, conversation and settings with a responsive charcoal/purple visual system. Add light, dark and Automatic appearance, central site integration, saved-link reopening, accessible reply/note tabs and clearer assignment controls. Preserve settings access and owner transfer.
+
 ## 0.1.2 — 24 October 2026
 
 Keep configuration available to WordPress administrators independently of conversation permissions. Add a permanent Settings entry, a Plugins settings link and explicit owner transfer with nonce, confirmation and stale-form protection. Transfer owner-specific ticket grants while preserving WordPress roles, ticket data and visitor access.
