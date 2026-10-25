@@ -1,0 +1,642 @@
+# Kourentzes Tickets English translation template.
+msgid ""
+msgstr "Project-Id-Version: Kourentzes Tickets 0.2.0\nReport-Msgid-Bugs-To: https://github.com/emperorkk/kourentzes-tickets/issues\nPOT-Creation-Date: 2026-10-24 00:00+0000\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\n"
+
+msgid "A DIRECT LINE TO US"
+msgstr ""
+
+msgid "A clear inbox. A fresh start."
+msgstr ""
+
+msgid "A few details now make a better answer possible."
+msgstr ""
+
+msgid "A little space for a better conversation."
+msgstr ""
+
+msgid "A question, an idea, something that isn’t working? Tell us what’s on your mind."
+msgstr ""
+
+msgid "A retention hold requires a reason and a future review date."
+msgstr ""
+
+msgid "Access"
+msgstr ""
+
+msgid "Access denied."
+msgstr ""
+
+msgid "Access denied. Check your private link."
+msgstr ""
+
+msgid "Activity & technical context"
+msgstr ""
+
+msgid "Add optional details"
+msgstr ""
+
+msgid "Alias (optional)"
+msgstr ""
+
+msgid "All"
+msgstr ""
+
+msgid "All permitted"
+msgstr ""
+
+msgid "Appearance"
+msgstr ""
+
+msgid "Appearance and site integration"
+msgstr ""
+
+msgid "Assign owner and create ticket pages"
+msgstr ""
+
+msgid "Assigned team member"
+msgstr ""
+
+msgid "Attack threshold / failed attempts in 5 minutes"
+msgstr ""
+
+msgid "Attack threshold / valid attempts in 10 minutes"
+msgstr ""
+
+msgid "Automatic"
+msgstr ""
+
+msgid "Back to website"
+msgstr ""
+
+msgid "Category"
+msgstr ""
+
+msgid "Central ticket appearance"
+msgstr ""
+
+msgid "Change ticket owner"
+msgstr ""
+
+msgid "Check the required fields and their length limits."
+msgstr ""
+
+msgid "Choose the central appearance for every ticket page. Automatic visitor mode follows this setting; visitors may explicitly choose light or dark."
+msgstr ""
+
+msgid "Closed"
+msgstr ""
+
+msgid "Closed: read-only. Use the new request link to contact us again."
+msgstr ""
+
+msgid "Complete initial owner setup"
+msgstr ""
+
+msgid "Confirm this action before continuing."
+msgstr ""
+
+msgid "Copied."
+msgstr ""
+
+msgid "Copy private link"
+msgstr ""
+
+msgid "Creation limit / 10 minutes"
+msgstr ""
+
+msgid "Creation limit / rolling 24 hours"
+msgstr ""
+
+msgid "Dark"
+msgstr ""
+
+msgid "Details"
+msgstr ""
+
+msgid "Download access file"
+msgstr ""
+
+msgid "Enable public intake"
+msgstr ""
+
+msgid "Enabled"
+msgstr ""
+
+msgid "End this ticket session"
+msgstr ""
+
+msgid "Erasure"
+msgstr ""
+
+msgid "Execution environment"
+msgstr ""
+
+msgid "Existing site theme preference key (optional)"
+msgstr ""
+
+msgid "Export this message page (JSON, including notes)"
+msgstr ""
+
+msgid "Extension reason"
+msgstr ""
+
+msgid "Filter"
+msgstr ""
+
+msgid "Flag for review"
+msgstr ""
+
+msgid "Follow the WordPress site theme"
+msgstr ""
+
+msgid "Follow the visitor’s device"
+msgstr ""
+
+msgid "General form page ID"
+msgstr ""
+
+msgid "General quarantine capacity"
+msgstr ""
+
+msgid "Grant future agent capabilities on individual WordPress users using your user-management tooling. No role receives automatic access. Agents need view_ktickets and reply_ktickets, and see assigned general tickets only unless explicitly granted view_all_ktickets."
+msgstr ""
+
+msgid "Hold review date (UTC: YYYY-MM-DD HH:MM:SS)"
+msgstr ""
+
+msgid "I confirm the transfer of ticket-management access to this user."
+msgstr ""
+
+msgid "I understand that the private link is my access key and cannot be recovered if lost."
+msgstr ""
+
+msgid "I verified live caching, analytics isolation, privacy notice, hosting logs/backups and HTTPS."
+msgstr ""
+
+msgid "In progress"
+msgstr ""
+
+msgid "Intake is disabled by default. Verify live cache exclusions, analytics isolation, hosting logs/backups, privacy notice and HTTPS before enabling it."
+msgstr ""
+
+msgid "Internal note"
+msgstr ""
+
+msgid "Internal note — never visible to visitor"
+msgstr ""
+
+msgid "Invalid project."
+msgstr ""
+
+msgid "Just between us."
+msgstr ""
+
+msgid "Keep the details together, follow the progress and pick up where you left off."
+msgstr ""
+
+msgid "Kourentzes Tickets requires a single-site installation."
+msgstr ""
+
+msgid "Kourentzes Tickets: complete owner setup and live cache/privacy verification before enabling public submissions. HTTPS is required."
+msgstr ""
+
+msgid "Last ownership change (UTC)"
+msgstr ""
+
+msgid "Let’s work through it."
+msgstr ""
+
+msgid "Lifecycle status"
+msgstr ""
+
+msgid "Light"
+msgstr ""
+
+msgid "Load older messages"
+msgstr ""
+
+msgid "Moderation"
+msgstr ""
+
+msgid "Moderation state"
+msgstr ""
+
+msgid "Necessary retention hold reason (empty removes hold)"
+msgstr ""
+
+msgid "Network replies / 10 minutes"
+msgstr ""
+
+msgid "New request"
+msgstr ""
+
+msgid "New submissions are temporarily disabled."
+msgstr ""
+
+msgid "Next page"
+msgstr ""
+
+msgid "No closure retention countdown yet."
+msgstr ""
+
+msgid "No email or account is required. Save the private link after submission and return to check for replies."
+msgstr ""
+
+msgid "No public threads. No account required. Your private link is your access key."
+msgstr ""
+
+msgid "No tickets match these filters. Try another view or check back later."
+msgstr ""
+
+msgid "Normal"
+msgstr ""
+
+msgid "Not required"
+msgstr ""
+
+msgid "Objection"
+msgstr ""
+
+msgid "Only needed if your site already stores its central light/dark choice in localStorage. Enter that exact key; supported values are light, dark, auto or system. Leave blank for the WordPress theme setting."
+msgstr ""
+
+msgid "Open"
+msgstr ""
+
+msgid "Open conversation"
+msgstr ""
+
+msgid "Open your saved private link to access this ticket."
+msgstr ""
+
+msgid "Operational health"
+msgstr ""
+
+msgid "Other"
+msgstr ""
+
+msgid "Outcome"
+msgstr ""
+
+msgid "Owner setup is already complete."
+msgstr ""
+
+msgid "PRIVACY & PERSONAL DATA"
+msgstr ""
+
+msgid "Page creation failed. Intake remains disabled."
+msgstr ""
+
+msgid "Paste a valid private link from this website."
+msgstr ""
+
+msgid "Paste the private link you saved when you submitted your request."
+msgstr ""
+
+msgid "Pending"
+msgstr ""
+
+msgid "Permanently delete ALL ticket data and capabilities on uninstall (irreversible)"
+msgstr ""
+
+msgid "Permanently delete this ticket and every related message, key and session?"
+msgstr ""
+
+msgid "Permanently delete ticket"
+msgstr ""
+
+msgid "Pick up the conversation."
+msgstr ""
+
+msgid "Please don’t share passwords, access tokens, databases or unnecessary personal data about other people."
+msgstr ""
+
+msgid "Plugin version"
+msgstr ""
+
+msgid "Portability"
+msgstr ""
+
+msgid "Portal page ID"
+msgstr ""
+
+msgid "Previous page"
+msgstr ""
+
+msgid "Privacy"
+msgstr ""
+
+msgid "Privacy & data"
+msgstr ""
+
+msgid "Privacy / personal data"
+msgstr ""
+
+msgid "Privacy / personal data request"
+msgstr ""
+
+msgid "Privacy form page ID"
+msgstr ""
+
+msgid "Privacy handling & retention"
+msgstr ""
+
+msgid "Privacy handling and retention hold"
+msgstr ""
+
+msgid "Privacy intake is unavailable for this project."
+msgstr ""
+
+msgid "Privacy notice"
+msgstr ""
+
+msgid "Privacy request"
+msgstr ""
+
+msgid "Private by design. Human at the other end."
+msgstr ""
+
+msgid "Proactively enable attack mode for general intake"
+msgstr ""
+
+msgid "Project name"
+msgstr ""
+
+msgid "Projects and categories"
+msgstr ""
+
+msgid "Public reply"
+msgstr ""
+
+msgid "Published privacy notice URL"
+msgstr ""
+
+msgid "Quarantine"
+msgstr ""
+
+msgid "Questions about your personal data deserve a clear, private answer. Start here."
+msgstr ""
+
+msgid "Reason for reopening (required when closed)"
+msgstr ""
+
+msgid "Received"
+msgstr ""
+
+msgid "Rectification"
+msgstr ""
+
+msgid "Refresh conversation"
+msgstr ""
+
+msgid "Replace private key"
+msgstr ""
+
+msgid "Replace the private key and revoke every existing guest session?"
+msgstr ""
+
+msgid "Reply (plain text)"
+msgstr ""
+
+msgid "Reply status"
+msgstr ""
+
+msgid "Request received. Save your private link now. There are no email notifications; return here to check for replies. Lost links cannot be recovered."
+msgstr ""
+
+msgid "Request type"
+msgstr ""
+
+msgid "Resolved"
+msgstr ""
+
+msgid "Responsible WordPress user"
+msgstr ""
+
+msgid "Restriction"
+msgstr ""
+
+msgid "Review flag"
+msgstr ""
+
+msgid "Run one cleanup batch"
+msgstr ""
+
+msgid "START A CONVERSATION"
+msgstr ""
+
+msgid "SUPPORT & CONVERSATIONS"
+msgstr ""
+
+msgid "Save internal note"
+msgstr ""
+
+msgid "Save privacy handling"
+msgstr ""
+
+msgid "Save project"
+msgstr ""
+
+msgid "Save ticket changes"
+msgstr ""
+
+msgid "Saved."
+msgstr ""
+
+msgid "Scheduled deletion"
+msgstr ""
+
+msgid "Search subject/reference"
+msgstr ""
+
+msgid "Secure ticket access is unavailable."
+msgstr ""
+
+msgid "Select Konstantinos Kourentzes’ existing WordPress account explicitly. Only this account receives ticket capabilities. Infrastructure administrators still have technical access."
+msgstr ""
+
+msgid "Select an existing WordPress user."
+msgstr ""
+
+msgid "Select an existing account."
+msgstr ""
+
+msgid "Select an existing user"
+msgstr ""
+
+msgid "Select at least one category."
+msgstr ""
+
+msgid "Select owner"
+msgstr ""
+
+msgid "Select the ticket owner"
+msgstr ""
+
+msgid "Send public reply"
+msgstr ""
+
+msgid "Send reply"
+msgstr ""
+
+msgid "Settings"
+msgstr ""
+
+msgid "Skip to content"
+msgstr ""
+
+msgid "Slug"
+msgstr ""
+
+msgid "Soft1 version"
+msgstr ""
+
+msgid "Staff"
+msgstr ""
+
+msgid "Status"
+msgstr ""
+
+msgid "Subject"
+msgstr ""
+
+msgid "Submit private request"
+msgstr ""
+
+msgid "Submit this message as a privacy / deletion request"
+msgstr ""
+
+msgid "Suggestion"
+msgstr ""
+
+msgid "Target due date (UTC: YYYY-MM-DD HH:MM:SS)"
+msgstr ""
+
+msgid "Technical issue"
+msgstr ""
+
+msgid "Technical reports do not create a support contract or guarantee a resolution."
+msgstr ""
+
+msgid "Terms"
+msgstr ""
+
+msgid "Terms URL (optional)"
+msgstr ""
+
+msgid "The form expired or has already been used. Reload the form before starting a new request."
+msgstr ""
+
+msgid "The pending submission expired. Reload to start again."
+msgstr ""
+
+msgid "The request could not be completed. Check your input or retry later."
+msgstr ""
+
+msgid "The request failed. Retry the same submission."
+msgstr ""
+
+msgid "The request is too large."
+msgstr ""
+
+msgid "The review queue is full. Your request has not been received. Please try again later. The separate privacy form remains available."
+msgstr ""
+
+msgid "The service is temporarily unavailable. Your request has not been confirmed. Retry the same submission."
+msgstr ""
+
+msgid "This private link grants access to the conversation. No email notifications are sent. Do not share the link."
+msgstr ""
+
+msgid "This request is awaiting review."
+msgstr ""
+
+msgid "This request origin is not permitted."
+msgstr ""
+
+msgid "This retry differs from the original submission. Restore the original values or start a new request."
+msgstr ""
+
+msgid "This ticket changed. Reload before saving."
+msgstr ""
+
+msgid "This ticket is closed and read-only. Please submit a new request."
+msgstr ""
+
+msgid "This ticket project is unavailable."
+msgstr ""
+
+msgid "Ticket owner"
+msgstr ""
+
+msgid "Ticket settings"
+msgstr ""
+
+msgid "Ticket settings & assignment"
+msgstr ""
+
+msgid "Ticket settings and health"
+msgstr ""
+
+msgid "Ticket setup"
+msgstr ""
+
+msgid "Tickets"
+msgstr ""
+
+msgid "Too many requests. Wait before trying again. Your request has not been received."
+msgstr ""
+
+msgid "Unassigned"
+msgstr ""
+
+msgid "Unverified"
+msgstr ""
+
+msgid "Use an existing slug to update a project. Add new form pages with that project slug. Privacy uses its separate form."
+msgstr ""
+
+msgid "Verification status"
+msgstr ""
+
+msgid "Verified"
+msgstr ""
+
+msgid "WELCOME BACK"
+msgstr ""
+
+msgid "Waiting for requester"
+msgstr ""
+
+msgid "Website"
+msgstr ""
+
+msgid "What can we help with?"
+msgstr ""
+
+msgid "WordPress administrators retain access to settings. Changing the owner grants ticket permissions to the selected account and removes them from the previous owner. Tickets, visitor links, messages and WordPress roles are preserved."
+msgstr ""
+
+msgid "Working…"
+msgstr ""
+
+msgid "YOUR PRIVATE CONVERSATION"
+msgstr ""
+
+msgid "YOUR REQUEST CENTER"
+msgstr ""
+
+msgid "You"
+msgstr ""
+
+msgid "Your conversation"
+msgstr ""
+
+msgid "Your data. Your voice."
+msgstr ""
+
+msgid "Your privacy request"
+msgstr ""
+
+msgid "Your saved private link"
+msgstr ""

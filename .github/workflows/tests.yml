@@ -1,0 +1,55 @@
+name: Integration and package
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    services:
+      database:
+        image: mariadb:10.11
+        env:
+          MARIADB_ROOT_PASSWORD: fixture-root-only
+          MARIADB_DATABASE: kt_fixture
+          MARIADB_USER: kt_fixture
+          MARIADB_PASSWORD: fixture-password-only
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=5s --health-timeout=5s --health-retries=20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mysqli, mbstring, dom, xml, simplexml, xmlreader, xmlwriter
+          tools: wp-cli
+      - name: Syntax
+        run: |
+          find . -name '*.php' -print0 | xargs -0 -n1 php -l
+          node --check assets/tickets.js
+          node --check assets/theme.js
+          node tests/theme.cjs
+      - name: WordPress integration with concurrent workers
+        env:
+          KTICKETS_TESTING: '1'
+          KTICKETS_WP_PATH: /tmp/kt-wordpress
+          KTICKETS_DB_NAME: kt_fixture
+          KTICKETS_DB_USER: kt_fixture
+          KTICKETS_DB_PASSWORD: fixture-password-only
+          KTICKETS_DB_HOST: 127.0.0.1:3306
+        run: bash scripts/test-integration.sh
+      - name: Package
+        run: python3 scripts/package.py
+      - name: Plugin Check on the distributable
+        run: |
+          wp plugin install plugin-check --version=2.1.0 --activate --path=/tmp/kt-wordpress
+          mkdir -p /tmp/kt-package
+          unzip -q dist/kourentzes-tickets-0.2.0.zip -d /tmp/kt-package
+          wp --no-color plugin check /tmp/kt-package/kourentzes-tickets --format=json --path=/tmp/kt-wordpress | tee /tmp/kt-plugin-check.txt
+          grep -Fxq 'Success: Checks complete. No errors found.' /tmp/kt-plugin-check.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: kourentzes-tickets
+          path: dist/kourentzes-tickets-*.zip

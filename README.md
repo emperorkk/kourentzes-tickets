@@ -1,29 +1,56 @@
 # Kourentzes Tickets
 
-Standalone WordPress plugin for private, anonymous ticket conversations without email or visitor accounts.
+Standalone WordPress plugin for private anonymous conversations, without email or visitor accounts.
 
-**Status:** implementation handoff prepared; plugin code is not implemented yet.
+**v0.2.0 — implementation candidate.** Source, an installable ZIP and repeatable tests are included. Public intake starts disabled. This repository has not been deployed to the owner's live website.
 
-## Start here
+## Install
 
-1. Read [AGENTS.md](AGENTS.md).
-2. Implement [the English specification](docs/SPECIFICATION.md).
-3. Follow [the implementation plan and acceptance checks](docs/IMPLEMENTATION.md).
-4. Use [the confirmed deployment environment](docs/ENVIRONMENT.md).
-5. Complete [the privacy notice draft](docs/PRIVACY-NOTICE.md) against actual hosting behavior before public intake.
+1. Download `dist/kourentzes-tickets-0.2.0.zip` and upload it under **Plugins → Add New → Upload Plugin**. Activate it.
+2. Open **Settings → Ticket setup**, explicitly select Konstantinos Kourentzes' existing WordPress account, and create the three ticket pages. No administrator role or other user receives ticket access automatically.
+3. As that selected owner, open **Settings → Ticket settings**. Publish the completed privacy notice, enter its HTTPS URL and verify the created page IDs.
+4. Follow [the deployment runbook](docs/RUNBOOK.md), including live cache/analytics exclusions and synthetic tests. Then acknowledge verification and enable intake.
 
-Owner decisions confirmed on 24 October 2026:
-- Name: Kourentzes Tickets; slug and text domain: `kourentzes-tickets`.
-- English throughout: frontend, admin, messages, documentation and privacy notice. Strings remain translation-ready; Greek translation is not a first-release deliverable.
-- Initial project: Soft1 Code assistant (`soft1-code-assistant`).
-- Categories: Technical issue, Suggestion, Privacy / personal data, Other.
-- Only Konstantinos Kourentzes manages tickets initially, including privacy requests.
-- Controller: Konstantinos Kourentzes; public contact: konstantinos@kourentzes.com.
-- Local anti-abuse only; no email, attachments, external AI, SaaS or public ticket directory.
-- Closed tickets are deleted after six calendar months, subject to documented required exceptions.
-- Owner maintains no backups; provider backups and logs are unverified.
-- Live-site installation is the chosen deployment approach. Public intake stays disabled during initial verification.
+Initial project: **Soft1 Code assistant** (`soft1-code-assistant`). Categories: Technical issue, Suggestion, Privacy / personal data, Other. The engine is independent of Soft1 and ChatGPT.
 
-The implementation must deliver an installable ZIP, migrations, automated security/integration tests, operational documentation and an honest verification report. Do not claim compatibility or deployment success without testing.
+## Included
 
-No production credentials, real tickets or access secrets belong in this public repository.
+- Anonymous submission, access-file download/copy and ticket-specific guest sessions.
+- Separate general/privacy intake with independent creation quotas.
+- Local signed forms, bounded rolling quotas, idempotent creation, risk flags, attack-mode quarantine and capacity reservation.
+- Admin list/search/filter, public replies, visibly separate internal notes, assignment, category/status changes and revision guards.
+- Privacy metadata/deadline assistance, necessary retention holds with review dates, key rotation, paginated JSON export and confirmed deletion.
+- Six-calendar-month closed-ticket retention, scheduled bounded cleanup, health reporting and optional `wp ktickets cleanup`.
+- Standalone local-asset ticket pages, no theme scripts, no third-party processing, no public ticket directory.
+
+Shortcodes:
+
+```text
+[ktickets_form project="soft1-code-assistant"]
+[ktickets_privacy_form project="soft1-code-assistant"]
+[ktickets_portal]
+```
+
+All interface text and documentation are English; a translation template is included. Attachments, email, push, AI, external anti-spam, SaaS and multisite are excluded.
+
+## Verification and limits
+
+See [TEST-REPORT.md](docs/TEST-REPORT.md) for executed checks and [ARCHITECTURE.md](docs/ARCHITECTURE.md) for security/limit choices. Reported deployment targets are WordPress 7.1.3 / PHP 8.2.34 / MariaDB 10.11.19; exact target PHP/DB versions and the production plugin stack remain unverified. Local Chromium browser flows and responsive layouts were exercised; production theme/cache integration still requires verification.
+
+The [specification](docs/SPECIFICATION.md), [environment](docs/ENVIRONMENT.md) and [privacy notice draft](docs/PRIVACY-NOTICE.md) remain the product/deployment baseline. No production credentials or real tickets are stored here.
+
+## Development
+
+Run `python3 scripts/package.py` to rebuild the deterministic distributable. PHP syntax checks and real WordPress/MariaDB integration tests are configured in `.github/workflows/tests.yml`.
+
+For a disposable WordPress database, set `KTICKETS_TESTING=1`, `KTICKETS_WP_PATH`, `KTICKETS_DB_NAME`, `KTICKETS_DB_USER`, `KTICKETS_DB_PASSWORD` and `KTICKETS_DB_HOST`, then run `bash scripts/test-integration.sh`. It installs synthetic fixture users and **deletes ticket data**; never run against production. `tests/browser.cjs` and `tests/http_smoke.py` require a separate fresh local fixture, documented in the runbook.
+
+License: GPL-2.0-or-later.
+
+To change the responsible user later, open **Settings → Ticket settings → Ticket owner**, select the existing account and confirm **Change ticket owner**. The previous owner loses ticket grants, while WordPress administrators retain settings access. Ticket data and visitor links are preserved.
+
+## Appearance
+
+The interface uses the site’s charcoal, purple and lavender palette. Open **Settings → Ticket settings → Appearance and site integration** to choose the central appearance. Visitor **Automatic** follows that setting; **Light** and **Dark** are explicit visitor overrides. The default follows the WordPress theme color scheme, with dark theme names recognized and device preference as fallback.
+
+For an existing custom site switch, enter its exact localStorage preference key (values `light`, `dark`, `auto`, `system`), or bridge a server-side setting through the `ktickets_site_theme` filter. Arbitrary theme scripts are not loaded inside the private portal. The only plugin localStorage preference is `ktickets.appearance`; it contains no ticket credentials or content.

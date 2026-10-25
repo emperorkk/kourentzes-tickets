@@ -1,6 +1,6 @@
 # Implementation plan and acceptance checklist
 
-Status: ready to implement; no plugin code or completed test results yet.
+Status: v0.1.0 implementation candidate is present. See TEST-REPORT.md for actual local results. The checklist below remains the full acceptance/release checklist; unchecked items must not be assumed complete.
 
 ## Work order
 
